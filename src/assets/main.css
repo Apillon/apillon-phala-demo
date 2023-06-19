@@ -1,0 +1,97 @@
+@import "./base.css";
+
+#app {
+  max-width: 1280px;
+  /* margin: middle; */
+  padding: 2rem;
+
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  }
+}
+
+/* style.css */
+body {
+  background-color: #141821;
+}
+* {
+  box-sizing: border-box;
+}
+.container {
+  max-width: 500px;
+  margin: 60px auto;
+}
+
+.container h1 {
+  text-align: center;
+  color: white;
+}
+
+#borderBox {
+  background-color: #141821;
+  padding: 30px;
+  border: 1px solid grey;
+  color: white;
+}
+
+#v .input-group {
+  margin-bottom: 15px;
+}
+
+#borderBox label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+#borderBox input {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid grey;
+}
+
+
+#nftInput {
+  padding: 10px;
+  width: 80%;
+}
+
+.submit-btn {
+  width: 100%;
+  background: #f9ff73;
+  font-size: 18px;
+  color: black;
+  border: 1px solid #141821;
+  border-radius: 1px;
+  padding: 20px;
+  text-align: center;
+}
+
+#connect-btn {
+  width: 50%;
+  margin: auto;
+  padding-top: 20px;
+}
