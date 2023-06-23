@@ -12,6 +12,9 @@
         />
   
         <label for="fileInput" :class="$style.fileLabel">
+          <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-1">
+            <svg-include :name="SvgNames.Upload" class="text-violet" />
+          </div>
           <div v-if="file">
             <h4 class="mb-1">{{ file.name }}</h4>
             <p class="mb-0">&nbsp;</p>
@@ -27,7 +30,7 @@
   </template>
   
   <script lang="ts" setup>
-  import { defineComponent, ref } from "vue";
+  import { SvgNames } from '../SvgInclude.vue';
   
   const emit = defineEmits(['uploaded']);
   const isDragging = ref<boolean>(false);

@@ -1,0 +1,69 @@
+.zoom {
+    animation: zoom 10s ease-in-out infinite;
+  }
+  
+  @keyframes zoom {
+    from {
+      opacity: 0.5;
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /**
+   * Btn animation - hover bounce
+  */
+  .hover-bounce {
+    animation-name: bounceOut;
+    animation-duration: 50s;
+  
+    &:hover {
+      animation-name: bounceIn;
+      animation-duration: 50s;
+    }
+    &.locked {
+      animation-duration: 0s;
+    }
+  }
+  
+  @keyframes bounceIn {
+    0% {
+      transform: translateY(0px);
+    }
+    1% {
+      transform: translateY(-4px);
+    }
+    2%,
+    100% {
+      transform: translateY(-3px);
+    }
+  }
+  
+  @keyframes bounceOut {
+    0% {
+      transform: translateY(-3px);
+    }
+    1% {
+      transform: translateY(1px);
+    }
+    2%,
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  /* Enter and leave animations can use different */
+  /* durations and timing functions.              */
+  .slide-down-enter-active {
+    transition: all 0.5s ease;
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  .slide-down-enter-to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  

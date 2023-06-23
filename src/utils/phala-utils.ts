@@ -32,7 +32,7 @@ export const setCid = async function (
     injector: any,  sender: AddressOrPair, nft_id: number, cid: String,
     callback: any) {
   console.log("Setting CID: ", cid, " with nft: ", nft_id);
-  callback(`Setting CID ${cid} for nft  ${nft_id} ....`);
+  callback(`Setting CID ${cid} for nft  ${nft_id} ...`);
 
   const [certificate, contract] = await initPhalaContract();
   const { gasRequired, storageDeposit } = await contract.query.setCid(
@@ -71,14 +71,10 @@ export const getCid = async function (nft_id: number) {
 
 export const encryptContent = async function (content: String) {
   console.log("Encrypting content ...");
-
   const [certificate, contract] = await initPhalaContract();
 
   const response = await contract.query.encryptContent(certificate, {}, content);
-  console.log("Output: ", response);
   let encryptedContent = response.output.toJSON().ok.ok;
-
-  console.log("Encrypted content ", encryptedContent);
 
   return encryptedContent;
 };
