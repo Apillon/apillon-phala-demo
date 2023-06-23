@@ -25,14 +25,14 @@
             :frame-count="11"
             :extra-stopped-frames="{ 10: 9000000 }"
           />
-        -->
+          -->
           <!-- Animation unlocked 
           <animated-image
             image-url-base="/images/animations/unlocked/schrod-cat"
             :frame-count="9"
             :extra-stopped-frames="{ 8: 9000000 }"
           />
-        --></div>
+          --></div>
 
         <p v-if="file" class="mb-0">{{ file.name }}</p>
         <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>

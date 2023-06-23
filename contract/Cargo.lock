@@ -828,12 +828,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "debug_print"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f215f9b7224f49fb73256115331f677d868b34d18b65dbe4db392e6021eea90"
-
-[[package]]
 name = "derivative"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2577,9 +2571,9 @@ dependencies = [
 
 [[package]]
 name = "pink-web3"
-version = "0.20.1"
+version = "0.20.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f7f901d2c95d105cff22ed144ca3c8907a9caddff2939f4f5cac66f36a5ea2a"
+checksum = "c45b0e3c122279f69ce3625c8895589e39afbf63162d08740f201e4bde89f21d"
 dependencies = [
  "arrayvec 0.7.2",
  "derive_more",
@@ -2928,8 +2922,6 @@ dependencies = [
  "aes-gcm-siv",
  "binascii",
  "cipher",
- "debug_print",
- "getrandom 0.2.9",
  "hex",
  "hex-literal",
  "ink",

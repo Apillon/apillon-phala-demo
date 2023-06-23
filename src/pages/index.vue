@@ -19,7 +19,7 @@
             <div id="borderBox" class="large-12 medium-12 small-12 cell">
               <DropFile class="mb-6" @uploaded="onFileUploaded" />
             </div>
-            <div id="borderBox" class="large-12 medium-12 small-12 cell mb-8">
+            <!-- <div id="borderBox" class="large-12 medium-12 small-12 cell mb-8">
               <label>NFT ID</label>
               <div id="nftInput">
                 <input
@@ -30,18 +30,18 @@
                   :class="$style.input"
                 />
               </div>
-            </div>
+            </div> -->
             <div>
               <label v-if="message != ''" class="absolute">{{ message }}</label>
               <!-- <label v-if="ipfsCid != ''" class="absolute" color="text-green">{{ ipfsCid }}</label> -->
             </div>
             <div class="flex gap-8">
               <div class="w-1/2" id="connect-btn">
-                <Btn type="secondary" @click="uploadAndEncryptFile()">Encrypt and Upload</Btn>
+                <Btn type="secondary" @click="uploadAndEncryptFile()">Upload</Btn>
               </div>
-              <div class="w-1/2" id="connect-btn">
+              <!-- <div class="w-1/2" id="connect-btn">
                 <Btn type="primary" @click="phalaDownloadAndDecrypt()">Download</Btn>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

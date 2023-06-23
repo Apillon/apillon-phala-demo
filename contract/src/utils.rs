@@ -37,7 +37,7 @@ pub mod utils {
         hex::encode(address)
     }
 
-    pub fn verify_ownership_moonbase(nft_id: u8) -> String  {
+    pub fn map_nft_to_address(nft_id: u8) -> String  {
         let phttp = PinkHttp::new("https://moonbase-alpha.public.blastapi.io");
         let eth = Eth::new(phttp);
         
@@ -49,5 +49,18 @@ pub mod utils {
             &query, (U256::from(nft_id), ), None, Options::default(), None)).unwrap();
         let addrs_moonbase: String =  hex::encode(addrs.0);
         addrs_moonbase   
+    }
+
+    pub fn verify_nft_ownership(signature: String, message: String, nft_id: u8) -> bool{
+        // Recover address: signature + message -> pubkey -> address 
+        let address = recover_acc_address(signature, message);
+        // Validate ownership for nft_id
+        let owner_address = map_nft_to_address(nft_id);
+
+        if address == owner_address {
+            return true
+        }
+
+        return false
     }
 }
