@@ -1,4 +1,5 @@
 import './assets/css/main.css';
+import 'vue3-toastify/dist/index.css';
 
 import { createApp } from 'vue';
 import { createHead } from '@vueuse/head';
