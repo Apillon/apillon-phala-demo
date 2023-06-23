@@ -1,5 +1,5 @@
 [package]
-name = "rust_vault_snippets"
+name = "apillon-contract"
 version = "0.1.0"
 authors = ["[your_name] <[your_email]>"]
 edition = "2021"
@@ -42,6 +42,7 @@ pink-extension-runtime = "0.4"
 
 [lib]
 path = "src/lib.rs"
+
 
 [features]
 default = ["std"]
