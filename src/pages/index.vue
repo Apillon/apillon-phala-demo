@@ -1,52 +1,74 @@
 <template>
-  <div class="container">
-    <h1>File Upload</h1>
-    <div class="container">
-      <div v-if="nfts" style="width:50%; display:inline-block;">
-        <NftCard :id="1" :src="nfts[0].image" :description="nfts[0].description" :name="nfts[0].name"/>
-      </div>
-      <div id="borderBox" class="large-12 medium-12 small-12 cell">
-        <DropFile class="mb-6" @uploaded="onFileUploaded" />
-      </div>
-      <div id="borderBox" class="large-12 medium-12 small-12 cell">
-        <label>NFT ID</label>
-        <div id="nftInput">
-          <input
-            v-model="nftRef"
-            type="nft_id"
-            name="nft_id"
-            id="nftInput"
-          />
+  <div>
+    <div ref="headerRef">
+      <Header :wallet-connected="!!address" @wallet-connect="connectWallet()" />
+    </div>
+    <div class="overflow-auto" :style="contentMaxStyle">
+      <div class="flex justify-center items-center" :style="contentMinStyle">
+        <div class="relative pt-8 pb-28">
+          <div class="container min-w-[80vw] lg:min-w-[40rem]">
+            <h1 class="text-center mb-8">Schrödinger’s NFT</h1>
+            <div v-if="nfts && nfts.length" style="width: 50%; display: inline-block">
+              <NftCard
+                :id="1"
+                :src="nfts[0].image"
+                :description="nfts[0].description"
+                :name="nfts[0].name"
+              />
+            </div>
+            <div id="borderBox" class="large-12 medium-12 small-12 cell">
+              <DropFile class="mb-6" @uploaded="onFileUploaded" />
+            </div>
+            <div id="borderBox" class="large-12 medium-12 small-12 cell mb-8">
+              <label>NFT ID</label>
+              <div id="nftInput">
+                <input
+                  v-model="nftRef"
+                  type="nft_id"
+                  name="nft_id"
+                  id="nftInput"
+                  :class="$style.input"
+                />
+              </div>
+            </div>
+            <div>
+              <label v-if="message != ''" class="absolute">{{ message }}</label>
+              <!-- <label v-if="ipfsCid != ''" class="absolute" color="text-green">{{ ipfsCid }}</label> -->
+            </div>
+            <div class="flex gap-8">
+              <div class="w-1/2" id="connect-btn">
+                <Btn type="secondary" @click="uploadAndEncryptFile()">Encrypt and Upload</Btn>
+              </div>
+              <div class="w-1/2" id="connect-btn">
+                <Btn type="primary" @click="phalaDownloadAndDecrypt()">Download</Btn>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div> 
-        <label v-if="message != ''" class="absolute">{{ message }}</label>
-        <!-- <label v-if="ipfsCid != ''" class="absolute" color="text-green">{{ ipfsCid }}</label> -->
+    </div>
+    <div class="footer absolute left-0 right-0 bottom-0 py-4 lg:py-8 flex justify-center bg-bg">
+      <div class="flex">
+        Powered by
+        <img
+          src="/images/phala.png"
+          class="ml-2 object-contain"
+          alt="phala"
+          width="82"
+          height="16"
+        />
       </div>
-    </div>
-    <div id="connect-btn">
-      <button class="submit-btn" @click="uploadAndEncryptFile()">Encrypt and Upload</button>
-    </div>
-    <div id="connect-btn">
-      <button class="submit-btn" @click="phalaDownloadAndDecrypt()">Download</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ethers, BigNumber } from "ethers";
-import { 
-    connectMetamaskWallet, 
-    connectPolkadotAccount, 
-    prepareSignData,
-} from "../utils/wallet-utils"
-import { setCid, encryptContent, downloadAndDecryptContent } from "../utils/phala-utils"
-import type { AddressOrPair } from "@polkadot/api/types";
+import { ethers, BigNumber } from 'ethers';
+
+import type { AddressOrPair } from '@polkadot/api/types';
 import * as fs from 'file-saver';
 import { Buffer } from 'buffer';
 import axios from 'axios';
-import { contractAbi } from '../lib/abi';
-import type { CollectionInfo,  Nft } from '../config/types'
 
 const loading = ref<boolean>(false);
 const loadingNfts = ref<boolean>(false);
@@ -61,6 +83,7 @@ const setIntervalRef = ref();
 const fileUuid = ref('');
 const fileName = ref<string>('');
 
+const ENV_CONFIG = ref(import.meta.env);
 const nfts = ref<Nft[]>([]);
 const collectionInfo = ref<CollectionInfo>();
 
@@ -71,21 +94,33 @@ let address: any = null;
 let signer: any = null;
 
 const config = {
-  CHAIN_ID: '0x507',
-  NFT_ADDRESS: '0x1645ff670f318eeb2c218feb2243bbb2a2c3644b',
+  CHAIN_ID: ENV_CONFIG.value.VITE_CHAIN_ID,
+  NFT_ADDRESS: ENV_CONFIG.value.VITE_NFT_ADDRESS,
 };
 
-let apiKey = "69f4c5c6-3f61-42b7-8119-ff888f4717af";
-let apiSecret = "y99qC3fj&9HS";
-let bucketUuid = "10268b28-684e-42a1-a037-5ce3663e7827";
-let creds = apiKey + ":" + apiSecret;
+let apiKey = '69f4c5c6-3f61-42b7-8119-ff888f4717af';
+let apiSecret = 'y99qC3fj&9HS';
+let bucketUuid = '10268b28-684e-42a1-a037-5ce3663e7827';
+let creds = apiKey + ':' + apiSecret;
 let credsB64Encoded = Buffer.from(creds).toString('base64');
 
+/** Heading height */
+const headerRef = ref<HTMLElement>();
+const contentMinStyle = computed(() => {
+  return {
+    minHeight: `calc(100vh - ${headerRef.value?.clientHeight || 0}px)`,
+  };
+});
+const contentMaxStyle = computed(() => {
+  return {
+    maxHeight: `calc(100vh - ${headerRef.value?.clientHeight || 0}px)`,
+  };
+});
 
-onMounted(async () => {
+async function connectWallet() {
   loading.value = true;
-  [ signer, provider ] = await connectMetamaskWallet();
-  [ injector, address ] = await connectPolkadotAccount();
+  [signer, provider] = await connectMetamaskWallet();
+  [injector, address] = await connectPolkadotAccount();
 
   contract = new ethers.Contract(config.NFT_ADDRESS, contractAbi, provider);
 
@@ -93,23 +128,25 @@ onMounted(async () => {
     collectionInfo.value = await getCollectionInfo();
   } catch (e) {
     console.error(e);
+    toast('Error' + e);
+
+    loading.value = false;
     return;
   }
 
   await loadAllNFTs();
   loading.value = false;
-});
+}
 
 async function setPhalaCid() {
-  console.log("Setting phala cid ...");
+  console.log('Setting phala cid ...');
   let cid = ipfsCid.value.toString();
   let nft_id = nftRef?.value;
 
-
-  if(nft_id != undefined) {
+  if (nft_id != undefined) {
     await setCid(injector, address as AddressOrPair, nft_id, cid, (msg: string) => {
       message.value = msg;
-      ipfsCid.value = "";
+      ipfsCid.value = '';
     });
   }
 }
@@ -178,16 +215,17 @@ async function uploadFiles(content: String) {
 
   try {
     const uploadResponse = await axios({
-      method: 'post', 
+      method: 'post',
       url: `https://api-dev.apillon.io/storage/${bucketUuid}/upload`,
       headers: {
         Authorization: `Basic ${credsB64Encoded}`,
-        "Content-Type": "application/json; charset=utf-8",
+        'Content-Type': 'application/json; charset=utf-8',
       },
-      data: JSON.stringify({files: {
+      data: JSON.stringify({
+        files: {
           fileName: file?.value?.name,
           contentType: 'text/html',
-        }
+        },
       }),
     });
 
@@ -196,32 +234,31 @@ async function uploadFiles(content: String) {
     fileUuid.value = uploadResponse.data.data.files[0].fileUuid;
     fileName.value = uploadResponse.data.data.files[0].fileName;
 
-    console.log("File name: ", fileName.value);
-    
+    console.log('File name: ', fileName.value);
+
     await axios({
-      method: 'put', 
+      method: 'put',
       url: putContenUrl,
       headers: {
-        "Content-Type": 'txt',
+        'Content-Type': 'txt',
       },
       data: content,
     });
 
     let endUploadUrl = `https://api-dev.apillon.io/storage/${bucketUuid}/upload/${sessionUuid}/end`;
     await axios({
-      method: 'post', 
+      method: 'post',
       url: endUploadUrl,
       headers: {
         Authorization: `Basic ${credsB64Encoded}`,
-        "Content-Type": 'application/json',
+        'Content-Type': 'application/json',
       },
-      data: {directSync: true},
+      data: { directSync: true },
     });
 
-    message.value = "Uploading your file to IPFS..."
+    message.value = 'Uploading your file to IPFS...';
     let fileSynced = verifyFileSyncedToIPFS();
-    console.log("Is file synced to IPFS: ", fileSynced);
-
+    console.log('Is file synced to IPFS: ', fileSynced);
   } catch (e) {
     console.log(e);
   }
@@ -241,12 +278,12 @@ function verifyFileSyncedToIPFS() {
 async function checkFileStatus() {
   let fileUrl = `https://api-dev.apillon.io/storage/${bucketUuid}/file/${fileUuid.value}/detail`;
   const response = await axios({
-    method: 'get', 
+    method: 'get',
     url: fileUrl,
     headers: {
       Authorization: `Basic ${credsB64Encoded}`,
-      "Content-Type": 'application/json',
-    }
+      'Content-Type': 'application/json',
+    },
   });
 
   let status = response.data.data.fileStatus;
@@ -274,10 +311,9 @@ async function phalaDownloadAndDecrypt() {
   const [signer, provider] = await connectMetamaskWallet();
   const [signature, hashedMessage] = await prepareSignData(signer);
 
-  console.log("Siganture: ", signature, "hashed message: ", hashedMessage);
+  console.log('Siganture: ', signature, 'hashed message: ', hashedMessage);
 
-  const decrypted = await downloadAndDecryptContent(
-      signature, hashedMessage, nft_id);
+  const decrypted = await downloadAndDecryptContent(signature, hashedMessage, nft_id);
 
   let response = decrypted.output.toJSON().ok.ok;
 
@@ -297,6 +333,17 @@ function writeFile(data: any) {
 function onFileUploaded(data: string) {
   uploadedFile.value = data;
 }
-
-
 </script>
+
+<style lang="postcss" module>
+.input {
+  @apply w-full h-12 py-3 px-5 text-sm bg-bg-light border-1 border-bg-lighter rounded-none transition-all duration-300 outline-none placeholder:text-body;
+
+  &:focus {
+    @apply border-white;
+  }
+  &:hover {
+    @apply border-body;
+  }
+}
+</style>

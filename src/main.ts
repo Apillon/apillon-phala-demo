@@ -1,11 +1,26 @@
-import "./assets/main.css";
+import './assets/css/main.css';
 
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
+import { createApp } from 'vue';
+import { createHead } from '@vueuse/head';
+import { createRouter, createWebHistory } from 'vue-router';
+import App from './App.vue';
+import routes from '~pages';
+import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify';
 
 const app = createApp(App);
 
+const router = createRouter({
+  routes,
+  history: createWebHistory(),
+});
 app.use(router);
 
-app.mount("#app");
+app.use(createHead());
+
+/** Messages: vue3-toastify */
+app.use(Vue3Toastify, {
+  autoClose: 3000,
+  position: 'bottom-right',
+} as ToastContainerOptions);
+
+app.mount('#app');

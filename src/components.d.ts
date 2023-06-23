@@ -7,28 +7,24 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Alert: typeof import('./components/Alert.vue')['default']
+    AnimatedImage: typeof import('./components/Animation/AnimatedImage.vue')['default']
     Btn: typeof import('./components/Btn.vue')['default']
-    Checkbox: typeof import('./components/Form/Field/Checkbox.vue')['default']
     DropFile: typeof import('./components/Form/DropFile.vue')['default']
+    Header: typeof import('./components/Header.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     IconCommunity: typeof import('./components/icons/IconCommunity.vue')['default']
     IconDocumentation: typeof import('./components/icons/IconDocumentation.vue')['default']
     IconEcosystem: typeof import('./components/icons/IconEcosystem.vue')['default']
+    Icons: typeof import('./components/Animation/Icons.vue')['default']
     IconSupport: typeof import('./components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./components/icons/IconTooling.vue')['default']
-    Input: typeof import('./components/Form/Field/Input.vue')['default']
-    Loader: typeof import('./components/Loader.vue')['default']
-    Mnemonic: typeof import('./components/Mnemonic.vue')['default']
-    Nav: typeof import('./components/Nav.vue')['default']
+    Loader: typeof import('./components/Animation/Loader.vue')['default']
     NftCard: typeof import('./components/NftCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Spinner: typeof import('./components/Spinner.vue')['default']
+    Spinner: typeof import('./components/Animation/Spinner.vue')['default']
     SvgInclude: typeof import('./components/SvgInclude.vue')['default']
-    Textarea: typeof import('./components/Form/Field/Textarea.vue')['default']
     TheWelcome: typeof import('./components/TheWelcome.vue')['default']
-    Tooltip: typeof import('./components/Tooltip.vue')['default']
     WelcomeItem: typeof import('./components/WelcomeItem.vue')['default']
   }
 }

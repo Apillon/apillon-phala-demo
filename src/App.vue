@@ -1,20 +1,7 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
-
-interface Window {
-  ethereum: any
-}
-
-</script>
-
 <template>
-  <header>
-  </header>
-
-  <RouterView />
+  <router-view />
 </template>
 
-<style scoped>
-
-</style>
+<script lang="ts" setup>
+import { RouterView } from 'vue-router';
+</script>
