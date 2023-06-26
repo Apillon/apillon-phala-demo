@@ -32,15 +32,30 @@
           </div>
           <div v-if="encryptionState === EncryptionState.DECRYPTED" class="flex gap-8 mt-8">
             <div class="w-1/2" id="connect-btn">
-              <Btn type="secondary" :disabled="!uploadedFile" @click="uploadAndEncryptFile()">
+              <Btn
+                type="secondary"
+                :loading="loadingUpload"
+                :disabled="!uploadedFile"
+                @click="uploadAndEncryptFile()"
+              >
                 Upload
               </Btn>
             </div>
             <div class="w-1/2" id="connect-btn">
-              <Btn type="primary" :disabled="!uploadedFile" @click="phalaDownloadAndDecrypt()">
+              <Btn
+                type="primary"
+                :loading="loadingDownload"
+                :disabled="!uploadedFile"
+                @click="phalaDownloadAndDecrypt()"
+              >
                 Download
               </Btn>
             </div>
+          </div>
+          <div v-if="ipfsCid" class="text-center">
+            <Btn type="link" :href="`https://ipfs2.apillon.io/ipfs/${ipfsCid}`" target="_blank">
+              {{ ipfsCid }}
+            </Btn>
           </div>
         </div>
       </div>
@@ -137,7 +152,7 @@ async function connectWallet() {
     encryptionState.value = EncryptionState.WALLET_CONNECTED;
   } catch (e) {
     console.error(e);
-    toast('Error' + e);
+    toast('Error' + e, { type: 'error' });
 
     walletLoading.value = false;
     return;
@@ -167,13 +182,13 @@ async function verifyOwner() {
 }
 
 async function setPhalaCid() {
-  toast('File is synced to IPFS. Setting CID in Phala.');
+  toast('File is synced to IPFS. Setting CID in Phala.', { type: 'info' });
   let cid = ipfsCid.value.toString();
   let nft_id = nftRef?.value;
 
   if (nft_id != undefined) {
     await setCid(injector, address as AddressOrPair, nft_id, cid, (msg: string) => {
-      toast(msg);
+      toast(msg, { type: 'error' });
       ipfsCid.value = '';
     });
   }
@@ -273,7 +288,7 @@ async function uploadFiles(content: String) {
       data: { directSync: true },
     });
 
-    toast('Uploading your file to IPFS...', { autoClose: 10000 });
+    toast('Uploading your file to IPFS...', { type: 'info', autoClose: 10000 });
     let fileSynced = verifyFileSyncedToIPFS();
     console.log('Is file synced to IPFS: ', fileSynced);
   } catch (e) {
@@ -311,7 +326,7 @@ async function checkFileStatus() {
     clearInterval(setIntervalRef.value);
     setPhalaCid();
 
-    toast('File CID: ', cid);
+    toast('File CID: ' + cid, { type: 'success' });
     return true;
   }
 
@@ -319,15 +334,19 @@ async function checkFileStatus() {
 }
 
 async function uploadAndEncryptFile() {
+  loadingUpload.value = true;
   try {
     const encrypted = await encryptContent(fileData.value);
     await uploadFiles(encrypted);
   } catch (error) {
     toast('Error: ' + error, { type: 'error' });
+  } finally {
+    loadingUpload.value = false;
   }
 }
 
 async function phalaDownloadAndDecrypt() {
+  loadingDownload.value = true;
   const decrypted = await downloadAndDecryptContent(
     signature.value,
     hashedMessage.value,
@@ -337,10 +356,11 @@ async function phalaDownloadAndDecrypt() {
   let response = decrypted.output.toJSON().ok.ok;
 
   if (response.includes('Invalid')) {
-    toast(response.toString());
+    toast(response.toString(), { type: 'warning' });
   } else {
     writeFile(decrypted.output.toJSON().ok.ok);
   }
+  loadingDownload.value = false;
 }
 
 function writeFile(data: any) {
