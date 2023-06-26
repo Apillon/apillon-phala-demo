@@ -15,6 +15,7 @@
           },
         ]"
         :disabled="state !== EncryptionState.DECRYPTED"
+        @click="emit('click')"
         @dragover="dragover"
         @dragleave="dragleave"
         @drop="drop"
@@ -87,7 +88,7 @@ const props = defineProps({
   state: { type: Number, default: EncryptionState.IDLE },
 });
 
-const emit = defineEmits(['uploaded', 'download']);
+const emit = defineEmits(['click', 'uploaded', 'download']);
 const isDragging = ref<boolean>(false);
 const file = ref<File | null>();
 const fileRef = ref<HTMLInputElement>();
