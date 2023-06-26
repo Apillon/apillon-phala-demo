@@ -157,6 +157,9 @@ async function verifyOwner() {
   signature.value = signData[0];
   hashedMessage.value = signData[1];
 
+  console.log('Hashed value: ', hashedMessage.value);
+  console.log('Signature: ', signature.value);
+
   let nft_id = nfts.value[0].id;
   const isAuthenticated = await verifyNftOwnership(nft_id, signature.value, hashedMessage.value);
   if (isAuthenticated) {
@@ -167,9 +170,9 @@ async function verifyOwner() {
 }
 
 async function setPhalaCid() {
-  toast('File is synced to IPFS. Setting CID in Phala.');
+  toast('File is synced to IPFS. Setting CID in Phala.', { autoClose: 2000 });
   let cid = ipfsCid.value.toString();
-  let nft_id = nftRef?.value;
+  let nft_id = nfts.value[0].id;
 
   if (nft_id != undefined) {
     await setCid(injector, address as AddressOrPair, nft_id, cid, (msg: string) => {
@@ -253,6 +256,10 @@ async function uploadFiles(content: String) {
     fileUuid.value = uploadResponse.data.data.files[0].fileUuid;
     fileName.value = uploadResponse.data.data.files[0].fileName;
 
+    console.log('CONTENT ', content);
+    console.log('SESSION ', sessionUuid);
+    console.log('PUT URL', putContenUrl);
+
     await axios({
       method: 'put',
       url: putContenUrl,
@@ -273,7 +280,7 @@ async function uploadFiles(content: String) {
       data: { directSync: true },
     });
 
-    toast('Uploading your file to IPFS...', { autoClose: 10000 });
+    toast('Uploading your file to IPFS...', { autoClose: 25000 });
     let fileSynced = verifyFileSyncedToIPFS();
     console.log('Is file synced to IPFS: ', fileSynced);
   } catch (e) {
@@ -308,10 +315,9 @@ async function checkFileStatus() {
   if (status == 4) {
     let cid = response.data.data.file.CID;
     ipfsCid.value = cid;
+    console.log('CID ', cid);
     clearInterval(setIntervalRef.value);
     setPhalaCid();
-
-    toast('File CID: ', cid);
     return true;
   }
 
@@ -334,13 +340,7 @@ async function phalaDownloadAndDecrypt() {
     nfts.value[0].id
   );
 
-  let response = decrypted.output.toJSON().ok.ok;
-
-  if (response.includes('Invalid')) {
-    toast(response.toString());
-  } else {
-    writeFile(decrypted.output.toJSON().ok.ok);
-  }
+  writeFile(decrypted.output.toJSON().ok.ok);
 }
 
 function writeFile(data: any) {
