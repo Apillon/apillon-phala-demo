@@ -1,82 +1,75 @@
 <template>
-  <div>
-    <div :class="$style.dropzone">
-      <div
-        :class="[
-          $style.dropzoneContainer,
-          { '!bg-bg-light': isDragging || file },
-          { 'pointer-events-none': state === EncryptionState.IDLE },
-          { 'cursor-pointer': state === EncryptionState.WALLET_CONNECTED },
-          {
-            'cursor-pointer border border-dashed border-green': state === EncryptionState.DECRYPTED,
-          },
-          {
-            'pointer-events-none border border-dashed border-pink': state === EncryptionState.ERROR,
-          },
-        ]"
-        :disabled="state !== EncryptionState.DECRYPTED"
-        @click="emit('click')"
-        @dragover="dragover"
-        @dragleave="dragleave"
-        @drop="drop"
-      >
-        <input
-          ref="fileRef"
-          type="file"
-          name="file"
-          id="fileInput"
-          accept=".json"
-          :class="$style.hiddenInput"
-          @change="onChange"
-        />
+  <div :class="$style.dropzone">
+    <div
+      :class="[
+        $style.dropzoneContainer,
+        { '!bg-bg-light': isDragging || file },
+        {
+          'pointer-events-none':
+            state === EncryptionState.IDLE || state === EncryptionState.VERIFYING_OWNER,
+        },
+        { 'cursor-pointer': state === EncryptionState.WALLET_CONNECTED },
+        {
+          'cursor-pointer border border-dashed border-green': state === EncryptionState.DECRYPTED,
+        },
+        {
+          'pointer-events-none border border-dashed border-pink': state === EncryptionState.ERROR,
+        },
+      ]"
+      @dragover="dragover"
+      @dragleave="dragleave"
+      @drop="drop"
+      @click="emit('verify')"
+    >
+      <input
+        ref="fileRef"
+        type="file"
+        name="file"
+        id="fileInput"
+        accept=".json"
+        :class="$style.hiddenInput"
+        @change="onChange"
+      />
 
-        <label for="fileInput" class="pb-10 pointer-events-none" :class="$style.fileLabel">
-          <h4 v-if="state === EncryptionState.IDLE" class="mt-12 mb-4">
-            Unlock encrypted files in seconds
-          </h4>
-          <h4 v-else-if="state === EncryptionState.DECRYPTED" class="mt-12 mb-4 text-green">
-            Correct NFT key.
-          </h4>
-          <h4 v-else-if="state === EncryptionState.ERROR" class="mt-12 mb-4 text-pink">
-            Wrong NFT key.
-          </h4>
+      <label for="fileInput" class="pb-10 pointer-events-none" :class="$style.fileLabel">
+        <h4 v-if="state === EncryptionState.VERIFYING_OWNER" class="mt-12 mb-4">
+          <Spinner />
+        </h4>
+        <h4 v-else-if="state === EncryptionState.DECRYPTED" class="mt-12 mb-4 text-green">
+          Correct NFT key.
+        </h4>
+        <h4 v-else-if="state === EncryptionState.ERROR" class="mt-12 mb-4 text-pink">
+          Wrong NFT key.
+        </h4>
+        <h4 v-else class="mt-12 mb-4">Unlock encrypted files in seconds</h4>
 
-          <div class="h-60 w-80 mx-auto my-4">
-            <animated-image
-              v-if="state === EncryptionState.DECRYPTED"
-              image-url-base="/images/animations/unlocked/schrod-cat"
-              :frame-count="9"
-              :extra-stopped-frames="{ 8: 9000000 }"
-            />
-            <animated-image
-              v-else-if="state === EncryptionState.ERROR"
-              image-url-base="/images/animations/locked/schrod-cat"
-              :frame-count="11"
-              :extra-stopped-frames="{ 10: 9000000 }"
-            />
-            <animated-image
-              v-else
-              image-url-base="/images/animations/upload/schrod-cat"
-              :frame-count="7"
-            />
-          </div>
+        <div class="h-60 w-80 mx-auto my-4">
+          <animated-image
+            v-if="state === EncryptionState.DECRYPTED"
+            image-url-base="/images/animations/unlocked/schrod-cat"
+            :frame-count="9"
+            :extra-stopped-frames="{ 8: 9000000 }"
+          />
+          <animated-image
+            v-else-if="state === EncryptionState.ERROR"
+            image-url-base="/images/animations/locked/schrod-cat"
+            :frame-count="11"
+            :extra-stopped-frames="{ 10: 9000000 }"
+          />
+          <animated-image
+            v-else
+            image-url-base="/images/animations/upload/schrod-cat"
+            :frame-count="7"
+          />
+        </div>
 
-          <p v-if="state === EncryptionState.ERROR" class="mb-0">
-            Your curiosity dind't unlock the files. <br />
-            (But it didn't killt eh cat, either.)
-          </p>
-          <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>
-          <p v-else class="mb-0">Drag & drop your NFT key here.</p>
-        </label>
-      </div>
-    </div>
-    <div v-if="state === EncryptionState.DECRYPTED" class="flex gap-8 mt-8">
-      <div class="w-1/2" id="connect-btn">
-        <Btn type="secondary" @click="triggerFileUpload()">Upload</Btn>
-      </div>
-      <div class="w-1/2" id="connect-btn">
-        <Btn type="primary" @click="emit('download')">Download</Btn>
-      </div>
+        <p v-if="state === EncryptionState.ERROR" class="mb-0">
+          Your curiosity dind't unlock the files. <br />
+          (But it didn't killt eh cat, either.)
+        </p>
+        <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>
+        <p v-else class="mb-0">Drag & drop your NFT key here.</p>
+      </label>
     </div>
   </div>
 </template>
@@ -88,7 +81,7 @@ const props = defineProps({
   state: { type: Number, default: EncryptionState.IDLE },
 });
 
-const emit = defineEmits(['click', 'uploaded', 'download']);
+const emit = defineEmits(['uploaded', 'download', 'verify']);
 const isDragging = ref<boolean>(false);
 const file = ref<File | null>();
 const fileRef = ref<HTMLInputElement>();

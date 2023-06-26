@@ -27,9 +27,20 @@
               ref="dropFileRef"
               :state="encryptionState"
               @uploaded="onFileUploaded"
-              @download="phalaDownloadAndDecrypt"
-              @click="verifyOwner"
+              @verify="verifyOwner"
             />
+          </div>
+          <div v-if="encryptionState === EncryptionState.DECRYPTED" class="flex gap-8 mt-8">
+            <div class="w-1/2" id="connect-btn">
+              <Btn type="secondary" :disabled="!uploadedFile" @click="uploadAndEncryptFile()">
+                Upload
+              </Btn>
+            </div>
+            <div class="w-1/2" id="connect-btn">
+              <Btn type="primary" :disabled="!uploadedFile" @click="phalaDownloadAndDecrypt()">
+                Download
+              </Btn>
+            </div>
           </div>
         </div>
       </div>
@@ -64,6 +75,8 @@ import { ref } from 'vue';
 
 const walletLoading = ref<boolean>(false);
 const loadingNfts = ref<boolean>(false);
+const loadingUpload = ref<boolean>(false);
+const loadingDownload = ref<boolean>(false);
 const dropFileRef = ref<HTMLElement>();
 const encryptionState = ref<EncryptionState>(EncryptionState.IDLE);
 
@@ -133,6 +146,7 @@ async function connectWallet() {
 }
 
 async function verifyOwner() {
+  encryptionState.value = EncryptionState.VERIFYING_OWNER;
   const [signature, hashedMessage] = await prepareSignData(signer);
 
   let nft_id = nfts.value[0].id;
@@ -337,9 +351,6 @@ function writeFile(data: any) {
 function onFileUploaded(file: File) {
   uploadedFile.value = file;
   parseUploadedFile(file);
-
-  encryptionState.value = EncryptionState.UPLOADED;
-  uploadAndEncryptFile();
 }
 
 function parseUploadedFile(file?: File) {
@@ -350,7 +361,6 @@ function parseUploadedFile(file?: File) {
   reader.onload = (ev: ProgressEvent<FileReader>) => {
     if (!!ev?.target?.result) {
       fileData.value = ev.target.result.toString();
-      console.log(fileData.value);
     } else {
       console.warn('File is empty or is not valid!');
     }

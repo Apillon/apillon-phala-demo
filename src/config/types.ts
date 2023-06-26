@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 export enum EncryptionState {
   IDLE = 1,
   WALLET_CONNECTED = 2,
-  UPLOADED = 3,
+  VERIFYING_OWNER = 3,
   DECRYPTED = 4,
   ERROR = 5,
 }
