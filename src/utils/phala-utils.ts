@@ -70,7 +70,7 @@ export const verifyNftOwnership = async function (
   signature: string,
   message: string
 ) {
-  console.log('Verifying owner for nft with id ', nft_id);
+  toast('Verifying owner for NFT with id ', nft_id);
 
   const [certificate, contract] = await initPhalaContract();
 
@@ -86,8 +86,6 @@ export const verifyNftOwnership = async function (
 };
 
 export const getCid = async function (nft_id: number) {
-  console.log('Getting CID ...');
-
   const [certificate, contract] = await initPhalaContract();
 
   const response = await contract.query.getCid(certificate, {}, 1);
@@ -97,7 +95,7 @@ export const getCid = async function (nft_id: number) {
 };
 
 export const encryptContent = async function (content: String) {
-  console.log('Encrypting content ...');
+  toast('Encrypting content ...');
   const [certificate, contract] = await initPhalaContract();
 
   const response = await contract.query.encryptContent(certificate, {}, content);
@@ -111,7 +109,7 @@ export const downloadAndDecryptContent = async function (
   hashedMessage: String,
   nft_id: number
 ) {
-  console.log('Downloading decrypted content ...');
+  toast('Downloading decrypted content ...');
 
   const [certificate, contract] = await initPhalaContract();
 

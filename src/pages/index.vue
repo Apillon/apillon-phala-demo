@@ -70,10 +70,13 @@ const encryptionState = ref<EncryptionState>(EncryptionState.IDLE);
 const uploadedFile = ref<File>();
 const fileData = ref<string>('');
 const nftRef = ref();
+const ifpsLoading = ref<boolean>(false);
 const ipfsCid = ref<String>('');
 const setIntervalRef = ref();
 const fileUuid = ref('');
 const fileName = ref<string>('');
+const signature = ref<string>('');
+const hashedMessage = ref<string>('');
 
 const ENV_CONFIG = ref(import.meta.env);
 const nfts = ref<Nft[]>([]);
@@ -113,7 +116,6 @@ async function connectWallet() {
   walletLoading.value = true;
   [signer, provider] = await connectMetamaskWallet();
   [injector, address] = await connectPolkadotAccount();
-  console.log('Address ', address);
 
   contract = new ethers.Contract(config.NFT_ADDRESS, contractAbi, provider);
 
@@ -133,10 +135,16 @@ async function connectWallet() {
 }
 
 async function verifyOwner() {
-  const [signature, hashedMessage] = await prepareSignData(signer);
+  if (signature.value && hashedMessage.value) {
+    return;
+  }
+
+  const signData = await prepareSignData(signer);
+  signature.value = signData[0];
+  hashedMessage.value = signData[1];
 
   let nft_id = nfts.value[0].id;
-  const isAuthenticated = await verifyNftOwnership(nft_id, signature, hashedMessage);
+  const isAuthenticated = await verifyNftOwnership(nft_id, signature.value, hashedMessage.value);
   if (isAuthenticated) {
     encryptionState.value = EncryptionState.DECRYPTED;
   } else {
@@ -145,7 +153,7 @@ async function verifyOwner() {
 }
 
 async function setPhalaCid() {
-  console.log('Setting phala cid ...');
+  toast('File is synced to IPFS. Setting CID in Phala.');
   let cid = ipfsCid.value.toString();
   let nft_id = nftRef?.value;
 
@@ -162,7 +170,6 @@ async function loadAllNFTs() {
 
   if (collectionInfo.value) {
     await fetchNFTs(collectionInfo.value.totalSupply);
-    console.log('NFTs loaded: ' + nfts.value);
   }
   loadingNfts.value = false;
 }
@@ -232,8 +239,6 @@ async function uploadFiles(content: String) {
     fileUuid.value = uploadResponse.data.data.files[0].fileUuid;
     fileName.value = uploadResponse.data.data.files[0].fileName;
 
-    console.log('File name: ', fileName.value);
-
     await axios({
       method: 'put',
       url: putContenUrl,
@@ -254,13 +259,12 @@ async function uploadFiles(content: String) {
       data: { directSync: true },
     });
 
-    toast('Uploading your file to IPFS...');
+    toast('Uploading your file to IPFS...', { autoClose: 10000 });
     let fileSynced = verifyFileSyncedToIPFS();
     console.log('Is file synced to IPFS: ', fileSynced);
   } catch (e) {
     console.log(e);
     toast('Error: ' + e, { type: 'error' });
-    encryptionState.value = EncryptionState.ERROR;
   }
 }
 
@@ -291,12 +295,12 @@ async function checkFileStatus() {
     let cid = response.data.data.file.CID;
     ipfsCid.value = cid;
     clearInterval(setIntervalRef.value);
-    console.log('File is synced successfully ...');
     setPhalaCid();
+
+    toast('File CID: ', cid);
     return true;
   }
 
-  console.log('Waiting for IPFS sync ...');
   return false;
 }
 
@@ -306,18 +310,15 @@ async function uploadAndEncryptFile() {
     await uploadFiles(encrypted);
   } catch (error) {
     toast('Error: ' + error, { type: 'error' });
-    encryptionState.value = EncryptionState.ERROR;
   }
 }
 
 async function phalaDownloadAndDecrypt() {
-  let nft_id = 1;
-  const [signer, provider] = await connectMetamaskWallet();
-  const [signature, hashedMessage] = await prepareSignData(signer);
-
-  console.log('Siganture: ', signature, 'hashed message: ', hashedMessage);
-
-  const decrypted = await downloadAndDecryptContent(signature, hashedMessage, nft_id);
+  const decrypted = await downloadAndDecryptContent(
+    signature.value,
+    hashedMessage.value,
+    nfts.value[0].id
+  );
 
   let response = decrypted.output.toJSON().ok.ok;
 
@@ -338,7 +339,6 @@ function onFileUploaded(file: File) {
   uploadedFile.value = file;
   parseUploadedFile(file);
 
-  encryptionState.value = EncryptionState.UPLOADED;
   uploadAndEncryptFile();
 }
 
