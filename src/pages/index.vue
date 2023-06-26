@@ -35,7 +35,7 @@
               <Btn
                 type="secondary"
                 :loading="loadingUpload"
-                :disabled="!uploadedFile"
+                :disabled="!uploadedFile || !fileData"
                 @click="uploadAndEncryptFile()"
               >
                 Upload
@@ -45,7 +45,7 @@
               <Btn
                 type="primary"
                 :loading="loadingDownload"
-                :disabled="!uploadedFile"
+                :disabled="!uploadedFile || !fileData"
                 @click="phalaDownloadAndDecrypt()"
               >
                 Download
