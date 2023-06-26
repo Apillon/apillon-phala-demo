@@ -55,7 +55,7 @@ const btnClass = computed(() => {
       'bg-bg text-primary border-1 border-bg-lighter': props.type === 'secondary',
       'hover-bounce': !props.href && !props.to && props.type !== 'builders',
       locked: isBtnLocked.value || props.locked,
-      'inline-block w-auto h-auto p-0 bg-transparent text-yellow hover:bg-yellow hover:text-bg transition-all duration-300':
+      'inline-block w-auto !h-auto !p-0 bg-transparent text-yellow hover:bg-yellow hover:text-bg transition-all duration-300':
         props.type === 'builders',
       'bg-blue text-bg': props.type === 'blue',
       'h-auto p-0 text-yellow font-sans font-normal underline locked': props.type === 'link',

@@ -11,11 +11,11 @@ const props = defineProps({
   inline: { type: Boolean, default: false },
 
   // for extraStoppedFrames, object should be of type {[frameIndex: number]: timeout in ms}
-  extraStoppedFrames: { type: Object, default: undefined },
+  extraStoppedFrames: { type: Object, default: {} },
 });
 
 const currentFrame = ref(-1);
-const constructedImageUrls = ref([]);
+const constructedImageUrls = ref<String[]>([]);
 
 async function startAnimation() {
   currentFrame.value = 0;
@@ -56,9 +56,9 @@ onMounted(() => {
 <template>
   <img
     v-for="(url, index) of constructedImageUrls"
-    :key="url"
+    :key="index"
     class="inline-block"
-    :src="url"
+    :src="`${url}`"
     :class="{ 'w-full': !props.inline, hidden: index !== currentFrame }"
   />
 </template>

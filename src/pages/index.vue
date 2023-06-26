@@ -3,60 +3,49 @@
     <div ref="headerRef">
       <Header :wallet-connected="!!address" @wallet-connect="connectWallet()" />
     </div>
+    <div class="absolute top-40 left-1/2 w-full max-w-7xl -translate-x-1/2">
+      <div v-if="nfts && nfts.length" class="absolute right-8 top-0 w-40">
+        <h4>Your NFTs:</h4>
+        <NftCard
+          :id="1"
+          :src="nfts[0].image"
+          :description="nfts[0].description"
+          :name="nfts[0].name"
+        />
+      </div>
+    </div>
     <div class="overflow-auto" :style="contentMaxStyle">
       <div class="flex justify-center items-center" :style="contentMinStyle">
-        <div class="relative pt-8 pb-28">
+        <div class="relative pb-24">
           <div class="container min-w-[80vw] lg:min-w-[40rem]">
-            <h1 class="text-center mb-8">Schrödinger’s NFT</h1>
-            <div v-if="nfts && nfts.length" style="width: 50%; display: inline-block">
-              <NftCard
-                :id="1"
-                :src="nfts[0].image"
-                :description="nfts[0].description"
-                :name="nfts[0].name"
-              />
-            </div>
+            <h1 class="text-center my-10">Schrödinger’s NFT</h1>
             <div id="borderBox" class="large-12 medium-12 small-12 cell">
-              <DropFile class="mb-6" @uploaded="onFileUploaded" />
+              <DropFile class="mb-6" :state="encryptionState" @uploaded="onFileUploaded" />
             </div>
-            <!-- <div id="borderBox" class="large-12 medium-12 small-12 cell mb-8">
-              <label>NFT ID</label>
-              <div id="nftInput">
-                <input
-                  v-model="nftRef"
-                  type="nft_id"
-                  name="nft_id"
-                  id="nftInput"
-                  :class="$style.input"
-                />
-              </div>
-            </div> -->
-            <div>
-              <label v-if="message != ''" class="absolute">{{ message }}</label>
-              <!-- <label v-if="ipfsCid != ''" class="absolute" color="text-green">{{ ipfsCid }}</label> -->
-            </div>
-            <div class="flex gap-8">
+            <div v-if="encryptionState !== EncryptionState.IDLE" class="flex gap-8">
               <div class="w-1/2" id="connect-btn">
                 <Btn type="secondary" @click="uploadAndEncryptFile()">Upload</Btn>
               </div>
-              <!-- <div class="w-1/2" id="connect-btn">
+              <div class="w-1/2" id="connect-btn">
                 <Btn type="primary" @click="phalaDownloadAndDecrypt()">Download</Btn>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="footer absolute left-0 right-0 bottom-0 py-4 lg:py-8 flex justify-center bg-bg">
-      <div class="flex">
+      <div class="flex gap-2 items-center">
         Powered by
+        <img src="/images/phala.png" class="object-contain" alt="phala" width="82" height="16" />
         <img
-          src="/images/phala.png"
-          class="ml-2 object-contain"
-          alt="phala"
-          width="82"
+          src="/images/moonbeam.svg"
+          class="object-contain"
+          alt="moonbeam"
+          width="83"
           height="16"
         />
+        <SvgInclude :name="SvgNames.Crust" />
       </div>
     </div>
   </div>
@@ -68,17 +57,19 @@ import { ethers, BigNumber } from 'ethers';
 import type { AddressOrPair } from '@polkadot/api/types';
 import * as fs from 'file-saver';
 import { Buffer } from 'buffer';
-import axios from 'axios';
+import axios, { FormDataVisitorHelpers } from 'axios';
+import { SvgNames } from '~/components/general/SvgInclude.vue';
+import { EncryptionState } from '~/config/types';
 
 const loading = ref<boolean>(false);
 const loadingNfts = ref<boolean>(false);
 const loadingMyNfts = ref<boolean>(false);
+const encryptionState = ref<EncryptionState>(EncryptionState.IDLE);
+
 const file = ref<File>();
 const uploadedFile = ref('');
-const fileRef = ref<HTMLInputElement>();
 const nftRef = ref();
 const ipfsCid = ref<String>('');
-const message = ref<String>('');
 const setIntervalRef = ref();
 const fileUuid = ref('');
 const fileName = ref<string>('');
@@ -145,7 +136,7 @@ async function setPhalaCid() {
 
   if (nft_id != undefined) {
     await setCid(injector, address as AddressOrPair, nft_id, cid, (msg: string) => {
-      message.value = msg;
+      toast(msg);
       ipfsCid.value = '';
     });
   }
@@ -202,7 +193,7 @@ async function fetchNFTs(balance: BigNumber | null | undefined, address = '') {
       const metadata = await fetch(url).then(response => {
         return response.json();
       });
-      nfts.value.push({ id: i, ...metadata });
+      nfts.value.push({ id: id.toNumber(), ...metadata });
     } catch (e) {
       console.error(e);
     }
@@ -211,7 +202,6 @@ async function fetchNFTs(balance: BigNumber | null | undefined, address = '') {
 
 async function uploadFiles(content: String) {
   ipfsCid.value = '';
-  message.value = '';
 
   try {
     const uploadResponse = await axios({
@@ -256,11 +246,13 @@ async function uploadFiles(content: String) {
       data: { directSync: true },
     });
 
-    message.value = 'Uploading your file to IPFS...';
+    toast('Uploading your file to IPFS...');
     let fileSynced = verifyFileSyncedToIPFS();
     console.log('Is file synced to IPFS: ', fileSynced);
   } catch (e) {
     console.log(e);
+    toast('Error: ' + e, { type: 'error' });
+    encryptionState.value = EncryptionState.ERROR;
   }
 }
 
@@ -290,7 +282,6 @@ async function checkFileStatus() {
   if (status == 4) {
     let cid = response.data.data.file.CID;
     ipfsCid.value = cid;
-    message.value = '';
     clearInterval(setIntervalRef.value);
     console.log('File is synced successfully ...');
     setPhalaCid();
@@ -302,8 +293,13 @@ async function checkFileStatus() {
 }
 
 async function uploadAndEncryptFile() {
-  const encrypted = await encryptContent(uploadedFile.value);
-  await uploadFiles(encrypted);
+  try {
+    const encrypted = await encryptContent(uploadedFile.value);
+    await uploadFiles(encrypted);
+  } catch (error) {
+    toast('Error: ' + error, { type: 'error' });
+    encryptionState.value = EncryptionState.ERROR;
+  }
 }
 
 async function phalaDownloadAndDecrypt() {
@@ -318,7 +314,7 @@ async function phalaDownloadAndDecrypt() {
   let response = decrypted.output.toJSON().ok.ok;
 
   if (response.includes('Invalid')) {
-    message.value = response.toString();
+    toast(response.toString());
   } else {
     writeFile(decrypted.output.toJSON().ok.ok);
   }
@@ -330,8 +326,12 @@ function writeFile(data: any) {
   fs.saveAs(blob, fileName?.value);
 }
 
-function onFileUploaded(data: string) {
+function onFileUploaded(file: File, data: string) {
+  console.log(file);
+  console.log(data);
   uploadedFile.value = data;
+  encryptionState.value = EncryptionState.UPLOADED;
+  uploadAndEncryptFile();
 }
 </script>
 

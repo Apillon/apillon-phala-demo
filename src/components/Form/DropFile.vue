@@ -1,7 +1,13 @@
 <template>
   <div :class="$style.dropzone">
     <div
-      :class="[$style.dropzoneContainer, { '!bg-bg-light': isDragging || file }]"
+      :class="[
+        $style.dropzoneContainer,
+        { '!bg-bg-light': isDragging || file },
+        { 'border border-dashed border-green': state === EncryptionState.DECRYPTED },
+        { 'border border-dashed border-pink': state === EncryptionState.ERROR },
+      ]"
+      @click="onDropzoneClick"
       @dragover="dragover"
       @dragleave="dragleave"
       @drop="drop"
@@ -17,7 +23,17 @@
       />
 
       <label for="fileInput" class="pb-10 pointer-events-none" :class="$style.fileLabel">
-        <div class="mt-8 mb-4 w-80 mx-auto">
+        <h4 v-if="state === EncryptionState.IDLE" class="mt-12 mb-4">
+          Unlock encrypted files in seconds
+        </h4>
+        <h4 v-else-if="state === EncryptionState.DECRYPTED" class="mt-12 mb-4 text-green">
+          Correct NFT key.
+        </h4>
+        <h4 v-else-if="state === EncryptionState.ERROR" class="mt-12 mb-4 text-pink">
+          Wrong NFT key.
+        </h4>
+
+        <div class="h-60 w-80 mx-auto my-4">
           <animated-image image-url-base="/images/animations/upload/schrod-cat" :frame-count="7" />
           <!-- Animation locked 
           <animated-image
@@ -32,9 +48,13 @@
             :frame-count="9"
             :extra-stopped-frames="{ 8: 9000000 }"
           />
-          --></div>
+          -->
+        </div>
 
-        <p v-if="file" class="mb-0">{{ file.name }}</p>
+        <p v-if="state === EncryptionState.ERROR" class="mb-0">
+          Your curiosity dind't unlock the files. <br />
+          (But it didn't killt eh cat, either.)
+        </p>
         <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>
         <p v-else class="mb-0">Drag & drop your NFT key here.</p>
       </label>
@@ -43,11 +63,23 @@
 </template>
 
 <script lang="ts" setup>
+import { EncryptionState } from '~/config/types';
+
+const props = defineProps({
+  state: { type: Number, default: EncryptionState.IDLE },
+});
+
 const emit = defineEmits(['uploaded']);
 const isDragging = ref<boolean>(false);
 const file = ref<File | null>();
 const fileRef = ref<HTMLInputElement>();
 const $style = useCssModule();
+
+function onDropzoneClick() {
+  if (fileRef.value) {
+    fileRef.value.click();
+  }
+}
 
 function onChange() {
   const files = fileRef.value?.files
@@ -79,7 +111,7 @@ function parseUploadedFile(file: File) {
   let reader = new FileReader();
   reader.onload = (ev: ProgressEvent<FileReader>) => {
     if (!!ev?.target?.result) {
-      emit('uploaded', ev.target.result.toString());
+      emit('uploaded', file, ev.target.result.toString());
     } else {
       console.warn('CSV file is empty or is not valid!');
     }
@@ -94,10 +126,13 @@ function parseUploadedFile(file: File) {
 }
 
 .dropzoneContainer {
-  @apply p-2 w-full min-h-[168px] flex flex-col justify-center rounded-[20px] bg-bg-dark;
-  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23313442' stroke-width='1' stroke-dasharray='4' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-  background-size: 100% 100%;
+  @apply p-8 w-full min-h-[168px] flex flex-col justify-center cursor-pointer rounded-[20px] hover:bg-bg-dark;
   transition: all 0.3s;
+
+  &.borderSvg {
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23F0F2DA' stroke-width='1' stroke-dasharray='4' stroke-dashoffset='0' rx='20' stroke-linecap='square'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+  }
 }
 
 .hiddenInput {
