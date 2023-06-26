@@ -1,7 +1,11 @@
 <template>
   <div>
     <div ref="headerRef">
-      <Header :wallet-connected="!!address" @wallet-connect="connectWallet()" />
+      <Header
+        :wallet-connected="!!address"
+        :wallet-loading="walletLoading"
+        @wallet-connect="connectWallet()"
+      />
     </div>
     <div class="absolute top-40 left-1/2 w-full max-w-7xl -translate-x-1/2">
       <div v-if="nfts && nfts.length" class="absolute right-8 top-0 w-40">
@@ -19,17 +23,13 @@
         <div class="relative pb-24">
           <div class="container min-w-[80vw] lg:min-w-[40rem]">
             <h1 class="text-center my-10">Schrödinger’s NFT</h1>
-            <div id="borderBox" class="large-12 medium-12 small-12 cell">
-              <DropFile class="mb-6" :state="encryptionState" @uploaded="onFileUploaded" />
-            </div>
-            <div v-if="encryptionState !== EncryptionState.IDLE" class="flex gap-8">
-              <div class="w-1/2" id="connect-btn">
-                <Btn type="secondary" @click="uploadAndEncryptFile()">Upload</Btn>
-              </div>
-              <div class="w-1/2" id="connect-btn">
-                <Btn type="primary" @click="phalaDownloadAndDecrypt()">Download</Btn>
-              </div>
-            </div>
+            <DropFile
+              ref="dropFileRef"
+              :state="encryptionState"
+              @uploaded="onFileUploaded"
+              @download="phalaDownloadAndDecrypt"
+              @click="verifyOwner"
+            />
           </div>
         </div>
       </div>
@@ -60,14 +60,15 @@ import { Buffer } from 'buffer';
 import axios, { FormDataVisitorHelpers } from 'axios';
 import { SvgNames } from '~/components/general/SvgInclude.vue';
 import { EncryptionState } from '~/config/types';
+import { ref } from 'vue';
 
-const loading = ref<boolean>(false);
+const walletLoading = ref<boolean>(false);
 const loadingNfts = ref<boolean>(false);
-const loadingMyNfts = ref<boolean>(false);
+const dropFileRef = ref<HTMLElement>();
 const encryptionState = ref<EncryptionState>(EncryptionState.IDLE);
 
-const file = ref<File>();
-const uploadedFile = ref('');
+const uploadedFile = ref<File>();
+const fileData = ref<string>('');
 const nftRef = ref();
 const ipfsCid = ref<String>('');
 const setIntervalRef = ref();
@@ -89,9 +90,9 @@ const config = {
   NFT_ADDRESS: ENV_CONFIG.value.VITE_NFT_ADDRESS,
 };
 
-let apiKey = '69f4c5c6-3f61-42b7-8119-ff888f4717af';
-let apiSecret = 'y99qC3fj&9HS';
-let bucketUuid = '10268b28-684e-42a1-a037-5ce3663e7827';
+let apiKey = '4ba34873-fdd2-4b0f-a383-05303bd0e615';
+let apiSecret = '*AHM5#u0uoev';
+let bucketUuid = 'f4833a8c-f010-4bc5-aa48-4b5223bd2ff5';
 let creds = apiKey + ':' + apiSecret;
 let credsB64Encoded = Buffer.from(creds).toString('base64');
 
@@ -109,24 +110,38 @@ const contentMaxStyle = computed(() => {
 });
 
 async function connectWallet() {
-  loading.value = true;
+  walletLoading.value = true;
   [signer, provider] = await connectMetamaskWallet();
   [injector, address] = await connectPolkadotAccount();
+  console.log('Address ', address);
 
   contract = new ethers.Contract(config.NFT_ADDRESS, contractAbi, provider);
 
   try {
     collectionInfo.value = await getCollectionInfo();
+    encryptionState.value = EncryptionState.WALLET_CONNECTED;
   } catch (e) {
     console.error(e);
     toast('Error' + e);
 
-    loading.value = false;
+    walletLoading.value = false;
     return;
   }
 
   await loadAllNFTs();
-  loading.value = false;
+  walletLoading.value = false;
+}
+
+async function verifyOwner() {
+  const [signature, hashedMessage] = await prepareSignData(signer);
+
+  let nft_id = nfts.value[0].id;
+  const isAuthenticated = await verifyNftOwnership(nft_id, signature, hashedMessage);
+  if (isAuthenticated) {
+    encryptionState.value = EncryptionState.DECRYPTED;
+  } else {
+    encryptionState.value = EncryptionState.ERROR;
+  }
 }
 
 async function setPhalaCid() {
@@ -147,17 +162,9 @@ async function loadAllNFTs() {
 
   if (collectionInfo.value) {
     await fetchNFTs(collectionInfo.value.totalSupply);
+    console.log('NFTs loaded: ' + nfts.value);
   }
   loadingNfts.value = false;
-}
-
-async function loadMyNFTs() {
-  loadingMyNfts.value = true;
-
-  const balance = contract ? await contract.balanceOf(address.value) : null;
-
-  await fetchNFTs(balance, address.value);
-  loadingMyNfts.value = false;
 }
 
 async function getCollectionInfo(): Promise<CollectionInfo> {
@@ -186,14 +193,15 @@ async function fetchNFTs(balance: BigNumber | null | undefined, address = '') {
 
   for (let i = 0; i < balance.toBigInt(); i++) {
     try {
-      const id = address
-        ? await contract.tokenOfOwnerByIndex(address, i)
-        : await contract.tokenByIndex(i);
-      const url = await contract.tokenURI(id.toBigInt());
+      let nftId = (
+        address ? await contract.tokenOfOwnerByIndex(address, i) : await contract.tokenByIndex(i)
+      ).toNumber();
+
+      const url = await contract.tokenURI(nftId);
       const metadata = await fetch(url).then(response => {
         return response.json();
       });
-      nfts.value.push({ id: id.toNumber(), ...metadata });
+      nfts.value.push({ id: nftId, ...metadata });
     } catch (e) {
       console.error(e);
     }
@@ -213,7 +221,7 @@ async function uploadFiles(content: String) {
       },
       data: JSON.stringify({
         files: {
-          fileName: file?.value?.name,
+          fileName: uploadedFile?.value?.name,
           contentType: 'text/html',
         },
       }),
@@ -294,7 +302,7 @@ async function checkFileStatus() {
 
 async function uploadAndEncryptFile() {
   try {
-    const encrypted = await encryptContent(uploadedFile.value);
+    const encrypted = await encryptContent(fileData.value);
     await uploadFiles(encrypted);
   } catch (error) {
     toast('Error: ' + error, { type: 'error' });
@@ -326,12 +334,28 @@ function writeFile(data: any) {
   fs.saveAs(blob, fileName?.value);
 }
 
-function onFileUploaded(file: File, data: string) {
-  console.log(file);
-  console.log(data);
-  uploadedFile.value = data;
+function onFileUploaded(file: File) {
+  uploadedFile.value = file;
+  parseUploadedFile(file);
+
   encryptionState.value = EncryptionState.UPLOADED;
   uploadAndEncryptFile();
+}
+
+function parseUploadedFile(file?: File) {
+  if (!file) {
+    return;
+  }
+  let reader = new FileReader();
+  reader.onload = (ev: ProgressEvent<FileReader>) => {
+    if (!!ev?.target?.result) {
+      fileData.value = ev.target.result.toString();
+      console.log(fileData.value);
+    } else {
+      console.warn('File is empty or is not valid!');
+    }
+  };
+  reader.readAsText(file);
 }
 </script>
 

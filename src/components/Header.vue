@@ -9,10 +9,17 @@
       <Btn type="builders" @click="showModalInfo"> How it works? </Btn>
     </div>
     <div>
-      <Btn v-if="walletConnected" type="secondary" class="bg-bg-dark !text-blue">
+      <Btn v-if="walletConnected" type="secondary" class="in-w-[12rem] bg-bg-dark !text-blue">
         Wallet connected
       </Btn>
-      <Btn v-else type="blue" @click="$emit('walletConnect')">Wallet connect</Btn>
+      <Btn
+        v-else
+        type="blue"
+        class="min-w-[12rem]"
+        :loading="walletLoading"
+        @click="$emit('walletConnect')"
+        >Wallet connect</Btn
+      >
     </div>
   </nav>
 
@@ -30,6 +37,7 @@ import { SvgNames } from '~/components/general/SvgInclude.vue';
 
 const props = defineProps({
   walletConnected: { type: Boolean, default: false },
+  walletLoading: { type: Boolean, default: false },
 });
 defineEmits(['walletConnect']);
 

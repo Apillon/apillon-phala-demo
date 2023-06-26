@@ -2,9 +2,10 @@ import { BigNumber } from 'ethers';
 
 export enum EncryptionState {
   IDLE = 1,
-  UPLOADED = 2,
-  DECRYPTED = 5,
-  ERROR = 6,
+  WALLET_CONNECTED = 2,
+  UPLOADED = 3,
+  DECRYPTED = 4,
+  ERROR = 5,
 }
 
 declare global {

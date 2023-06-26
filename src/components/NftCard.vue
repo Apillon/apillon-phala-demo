@@ -1,10 +1,6 @@
 <template>
   <div :id="'nft_' + id" class="nft">
     <img :src="src" class="nft_img" :alt="name" />
-    <div class="nft_content hidden">
-      <h3>{{ name || `#${id}` }}</h3>
-      <p>{{ description }}</p>
-    </div>
   </div>
 </template>
 
