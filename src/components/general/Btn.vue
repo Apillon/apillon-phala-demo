@@ -58,7 +58,8 @@ const btnClass = computed(() => {
       'inline-block w-auto !h-auto !p-0 bg-transparent text-yellow hover:bg-yellow hover:text-bg transition-all duration-300':
         props.type === 'builders',
       'bg-blue text-bg': props.type === 'blue',
-      'h-auto p-0 text-yellow font-sans font-normal underline locked': props.type === 'link',
+      '!h-auto !p-0 !w-auto text-yellow font-sans font-normal underline locked':
+        props.type === 'link',
     },
   ];
 });

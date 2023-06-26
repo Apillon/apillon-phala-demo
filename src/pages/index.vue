@@ -8,7 +8,7 @@
       />
     </div>
     <div class="absolute top-40 left-1/2 w-full max-w-7xl -translate-x-1/2">
-      <div v-if="nfts && nfts.length" class="absolute right-8 top-0 w-40">
+      <div v-if="nfts && nfts.length" class="absolute left-8 top-0 w-40">
         <h4>Your NFTs:</h4>
         <NftCard
           :id="1"
@@ -42,18 +42,19 @@
               </Btn>
             </div>
             <div class="w-1/2" id="connect-btn">
-              <Btn
-                type="primary"
-                :loading="loadingDownload"
-                :disabled="!uploadedFile || !fileData"
-                @click="phalaDownloadAndDecrypt()"
-              >
+              <Btn type="primary" :loading="loadingDownload" @click="phalaDownloadAndDecrypt()">
                 Download
               </Btn>
             </div>
-          </div
+          </div>
           <div v-if="ipfsCid" class="text-center">
-            <Btn type="link" :href="`https://ipfs2.apillon.io/ipfs/${ipfsCid}`" target="_blank">
+            Encrypted file:
+            <Btn
+              type="link"
+              class="inline-block"
+              :href="`https://ipfs2.apillon.io/ipfs/${ipfsCid}`"
+              target="_blank"
+            >
               {{ ipfsCid }}
             </Btn>
           </div>
