@@ -150,6 +150,7 @@ async function connectWallet() {
 
   try {
     collectionInfo.value = await getCollectionInfo();
+    console.log(collectionInfo.value);
     encryptionState.value = EncryptionState.WALLET_CONNECTED;
   } catch (e) {
     console.error(e);
@@ -192,9 +193,19 @@ async function setPhalaCid() {
   let nft_id = nfts.value[0].id;
 
   if (nft_id != undefined) {
-    await setCid(injector, address as AddressOrPair, nft_id, cid, (msg: string) => {
-      ipfsCid.value = '';
-    });
+    await setCid(
+      injector,
+      address as AddressOrPair,
+      nft_id,
+      cid,
+      (msg: string, finished: boolean) => {
+        toast(msg, { type: 'info' });
+        ipfsCid.value = '';
+        if (finished) {
+          loadingUpload.value = false;
+        }
+      }
+    );
   }
 }
 
@@ -272,10 +283,6 @@ async function uploadFiles(content: String) {
     fileUuid.value = uploadResponse.data.data.files[0].fileUuid;
     fileName.value = uploadResponse.data.data.files[0].fileName;
 
-    console.log('CONTENT ', content);
-    console.log('SESSION ', sessionUuid);
-    console.log('PUT URL', putContenUrl);
-
     await axios({
       method: 'put',
       url: putContenUrl,
@@ -291,7 +298,7 @@ async function uploadFiles(content: String) {
       url: endUploadUrl,
       headers: {
         Authorization: `Basic ${credsB64Encoded}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'applicaution/json',
       },
       data: { directSync: true },
     });
@@ -349,8 +356,6 @@ async function uploadAndEncryptFile() {
     await uploadFiles(encrypted);
   } catch (error) {
     toast('Error: ' + error, { type: 'error' });
-  } finally {
-    loadingUpload.value = false;
   }
 }
 
@@ -362,7 +367,12 @@ async function phalaDownloadAndDecrypt() {
     nfts.value[0].id
   );
 
-  writeFile(decrypted.output.toJSON().ok.ok);
+  try {
+  } catch (e) {
+    writeFile(decrypted.output.toJSON().ok.ok);
+  } finally {
+    loadingDownload.value = false;
+  }
 }
 
 function writeFile(data: any) {

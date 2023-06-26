@@ -3,7 +3,7 @@ use alloc::string::String;
 use ink_env::{ecdsa_recover, ecdsa_to_eth_address};
 
 use pink_web3::{
-    types::{U256, Address, H160, BlockId},
+    types::{U256, Address},
     contract::{Options, Contract},
     transports::{
         pink_http::PinkHttp,
@@ -41,10 +41,10 @@ pub mod utils {
 
     pub fn map_nft_to_address(nft_id: u8) -> String  {
         let default: Address =  Address::zero();
-        let phttp = PinkHttp::new("https://moonbase-alpha.public.blastapi.io");
+        let phttp = PinkHttp::new("https://rpc.api.moonbeam.network/");
         let eth = Eth::new(phttp);
         
-        let addr = String::from("1645ff670f318eeb2c218feb2243bbb2a2c3644b").parse().unwrap();
+        let addr = String::from("1e36B381647F557E43E5DC2A191E95C81221Ae01").parse().unwrap();
         let contract = Contract::from_json(eth, addr, include_bytes!("../abis/moonbase_nft_abi.json")).unwrap();
 
         let query = "ownerOf";

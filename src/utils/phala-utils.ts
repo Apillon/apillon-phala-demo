@@ -13,7 +13,7 @@ const initPhalaContract = async function () {
   // Move to configuration
   const wsProvider = 'wss://poc5.phala.network/ws';
   const pruntimeURL = 'https://poc5.phala.network/tee-api-1';
-  const contractId = '0xcf88487d992d8ff2eae80843d1372462d34dadcf8b5531821cffeb11fc2f39b6';
+  const contractId = '0x01f1cfe2ffb7248d5eded100bcdebe51a9c11d7f6652b5160455d94b6d2b692a';
 
   const provider = new WsProvider(wsProvider);
   const api = await ApiPromise.create({ provider, types });
@@ -35,9 +35,6 @@ export const setCid = async function (
   cid: String,
   callback: any
 ) {
-  console.log('Setting CID: ', cid, ' with nft: ', nft_id);
-  callback(`Setting CID ${cid} for nft  ${nft_id} ...`);
-
   const [certificate, contract] = await initPhalaContract();
   const { gasRequired, storageDeposit } = await contract.query.setCid(certificate, {}, nft_id, cid);
 
@@ -51,14 +48,14 @@ export const setCid = async function (
   await contract.tx
     .setCid(options, nft_id, cid)
     .signAndSend(sender, { signer: injector.signer }, async (result: any) => {
-      callback(`Submitting transaction ....`);
       if (result.status.isInBlock) {
         console.log('TRANSACTION IS IN BLOCK ...');
       } else if (result.status.isFinalized) {
         console.log('TRANSACTION IS FINALIZED ...');
-        toast('Done! Your file was successfully encrypted and uploaded to decentralized storage.', {
-          type: 'info',
-        });
+        callback(
+          'Done! Your file was successfully encrypted and uploaded to decentralized storage.',
+          true
+        );
       } else {
         console.info('TRANSACTION STATE: ', result.status);
       }
