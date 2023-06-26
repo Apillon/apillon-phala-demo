@@ -43,7 +43,7 @@ export const setCid = async function (
     storageDepositLimit: storageDeposit.isCharge ? storageDeposit.asCharge : null,
   };
 
-  toast('Submitting Phala transaction ...', { type: 'info' });
+  toast('Submitting transaction to Phala', { type: 'warning' });
 
   await contract.tx
     .setCid(options, nft_id, cid)
@@ -52,10 +52,7 @@ export const setCid = async function (
         console.log('TRANSACTION IS IN BLOCK ...');
       } else if (result.status.isFinalized) {
         console.log('TRANSACTION IS FINALIZED ...');
-        callback(
-          'Done! Your file was successfully encrypted and uploaded to decentralized storage.',
-          true
-        );
+        callback('Done! File successfully encrypted and uploaded to decentralized storage', true);
       } else {
         console.info('TRANSACTION STATE: ', result.status);
       }
@@ -69,7 +66,7 @@ export const verifyNftOwnership = async function (
   signature: string,
   message: string
 ) {
-  toast('Verifying owner for NFT with ID ' + nft_id, { type: 'info' });
+  toast('Verifying NFT ownership', { type: 'warning' });
 
   const [certificate, contract] = await initPhalaContract();
 
@@ -94,7 +91,7 @@ export const getCid = async function (nft_id: number) {
 };
 
 export const encryptContent = async function (content: String) {
-  toast('Encrypting content ...', { type: 'info' });
+  toast('Encrypting content', { type: 'warning' });
   const [certificate, contract] = await initPhalaContract();
 
   const response = await contract.query.encryptContent(certificate, {}, content);
@@ -108,7 +105,7 @@ export const downloadAndDecryptContent = async function (
   hashedMessage: String,
   nft_id: number
 ) {
-  toast('Downloading decrypted content ...', { type: 'info' });
+  toast('Decrypting and downloading file', { type: 'warning' });
 
   const [certificate, contract] = await initPhalaContract();
 
@@ -119,6 +116,8 @@ export const downloadAndDecryptContent = async function (
     hashedMessage,
     nft_id
   );
+
+  console.log('RESPONSE ', response);
 
   return response;
 };

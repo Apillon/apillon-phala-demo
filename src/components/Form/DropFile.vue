@@ -94,9 +94,7 @@ function triggerFileUpload() {
 }
 
 function onChange() {
-  const files = fileRef.value?.files
-    ? Array.from(fileRef.value.files).filter(item => item.type.includes('json'))
-    : [];
+  const files = fileRef.value?.files;
 
   if (files && files.length > 0 && files[0]) {
     file.value = files[0];
