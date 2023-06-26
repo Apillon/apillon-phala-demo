@@ -46,6 +46,8 @@ export const setCid = async function (
     storageDepositLimit: storageDeposit.isCharge ? storageDeposit.asCharge : null,
   };
 
+  toast('Submitting Phala transaction ...', { type: 'info' });
+
   await contract.tx
     .setCid(options, nft_id, cid)
     .signAndSend(sender, { signer: injector.signer }, async (result: any) => {
@@ -54,9 +56,9 @@ export const setCid = async function (
         console.log('TRANSACTION IS IN BLOCK ...');
       } else if (result.status.isFinalized) {
         console.log('TRANSACTION IS FINALIZED ...');
-        callback(
-          'Done! Your file was successfully encrypted and uploaded to decentralized storage.'
-        );
+        toast('Done! Your file was successfully encrypted and uploaded to decentralized storage.', {
+          type: 'info',
+        });
       } else {
         console.info('TRANSACTION STATE: ', result.status);
       }
@@ -70,7 +72,7 @@ export const verifyNftOwnership = async function (
   signature: string,
   message: string
 ) {
-  toast('Verifying owner for NFT with id ', nft_id);
+  toast('Verifying owner for NFT with ID ' + nft_id, { type: 'info' });
 
   const [certificate, contract] = await initPhalaContract();
 
@@ -95,7 +97,7 @@ export const getCid = async function (nft_id: number) {
 };
 
 export const encryptContent = async function (content: String) {
-  toast('Encrypting content ...');
+  toast('Encrypting content ...', { type: 'info' });
   const [certificate, contract] = await initPhalaContract();
 
   const response = await contract.query.encryptContent(certificate, {}, content);
@@ -109,7 +111,7 @@ export const downloadAndDecryptContent = async function (
   hashedMessage: String,
   nft_id: number
 ) {
-  toast('Downloading decrypted content ...');
+  toast('Downloading decrypted content ...', { type: 'info' });
 
   const [certificate, contract] = await initPhalaContract();
 
