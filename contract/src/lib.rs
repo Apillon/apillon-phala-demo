@@ -18,7 +18,7 @@ mod phat_crypto {
     use alloc::{vec::Vec, string::String, format};
 
     use crate::error::ApillonError;
-    use utils::utils::{recover_acc_address, map_nft_to_address, verify_nft_ownership};
+    use utils::utils::{recover_acc_address, verify_nft_ownership};
 
     use ink_storage::Mapping;
     use aes_gcm_siv::{
@@ -82,7 +82,7 @@ mod phat_crypto {
         }
         
         #[ink(message)]
-        pub fn verify_nft_ownership(&self, nft_id: u8, signature: String, message: String) -> CustomResult<bool> {
+        pub fn verify_nft_ownership(&self, signature: String, message: String, nft_id: u8) -> CustomResult<bool> {
             let is_owner = verify_nft_ownership(signature, message, nft_id);
             Ok(is_owner)
         }

@@ -1,12 +1,20 @@
 import { BigNumber } from 'ethers';
 
-export interface Nft {
-  name: string;
-  description: string;
-  image: string;
+export enum EncryptionState {
+  IDLE = 1,
+  UPLOADED = 2,
+  DECRYPTED = 5,
+  ERROR = 6,
 }
-  
-export interface CollectionInfo {
+
+declare global {
+  interface Nft {
+    name: string;
+    description: string;
+    image: string;
+  }
+
+  interface CollectionInfo {
     drop: Boolean;
     dropStart: BigNumber;
     maxSupply: BigNumber;
@@ -20,3 +28,4 @@ export interface CollectionInfo {
     symbol: String;
     totalSupply: BigNumber;
   }
+}

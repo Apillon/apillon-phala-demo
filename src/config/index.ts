@@ -3,7 +3,6 @@ import { BigNumber } from 'ethers';
 export {};
 
 declare global {
-
   /**
    * Window
    */
@@ -12,6 +11,7 @@ declare global {
   }
 
   interface Nft {
+    id: number;
     name: string;
     description: string;
     image: string;

@@ -8,7 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AnimatedImage: typeof import('./components/Animation/AnimatedImage.vue')['default']
-    Btn: typeof import('./components/Btn.vue')['default']
+    Btn: typeof import('./components/general/Btn.vue')['default']
     DropFile: typeof import('./components/Form/DropFile.vue')['default']
     Header: typeof import('./components/Header.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
@@ -19,11 +19,12 @@ declare module 'vue' {
     IconSupport: typeof import('./components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./components/icons/IconTooling.vue')['default']
     Loader: typeof import('./components/Animation/Loader.vue')['default']
+    Modal: typeof import('./components/general/Modal.vue')['default']
     NftCard: typeof import('./components/NftCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Spinner: typeof import('./components/Animation/Spinner.vue')['default']
-    SvgInclude: typeof import('./components/SvgInclude.vue')['default']
+    SvgInclude: typeof import('./components/general/SvgInclude.vue')['default']
     TheWelcome: typeof import('./components/TheWelcome.vue')['default']
     WelcomeItem: typeof import('./components/WelcomeItem.vue')['default']
   }

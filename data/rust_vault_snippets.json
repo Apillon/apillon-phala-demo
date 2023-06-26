@@ -1,1 +1,267 @@
-{"source":{"hash":"0x66454240a17775dad92457f94b17cb49b39c7e69e0815c72386f54a6dedd979d","language":"ink! 4.1.0","compiler":"rustc 1.68.2","build_info":{"build_mode":"Debug","cargo_contract_version":"2.1.0","rust_toolchain":"stable-aarch64-apple-darwin","wasm_opt_settings":{"keep_debug_symbols":false,"optimization_passes":"Z"}}},"contract":{"name":"rust_vault_snippets","version":"0.1.0","authors":["[your_name] <[your_email]>"]},"spec":{"constructors":[{"args":[],"default":false,"docs":[],"label":"new","payable":false,"returnType":{"displayName":["ink_primitives","ConstructorResult"],"type":5},"selector":"0x9bae9d5e"}],"docs":[],"environment":{"accountId":{"displayName":[],"type":6},"balance":{"displayName":[],"type":6},"blockNumber":{"displayName":[],"type":6},"chainExtension":{"displayName":[],"type":6},"hash":{"displayName":[],"type":6},"maxEventTopics":0,"timestamp":{"displayName":[],"type":6}},"events":[],"lang_error":{"displayName":["ink","LangError"],"type":7},"messages":[{"args":[{"label":"file_content","type":{"displayName":["String"],"type":2}}],"default":false,"docs":[],"label":"encrypt_content","mutates":false,"payable":false,"returnType":{"displayName":["ink","MessageResult"],"type":8},"selector":"0xd3c77ae3"},{"args":[{"label":"nft_id","type":{"displayName":["u8"],"type":1}},{"label":"cid","type":{"displayName":["String"],"type":2}}],"default":false,"docs":[],"label":"set_cid","mutates":true,"payable":false,"returnType":{"displayName":["ink","MessageResult"],"type":5},"selector":"0xe7089a85"},{"args":[{"label":"nft_id","type":{"displayName":["u8"],"type":1}}],"default":false,"docs":[],"label":"get_cid","mutates":false,"payable":false,"returnType":{"displayName":["ink","MessageResult"],"type":8},"selector":"0x46a31eb3"},{"args":[{"label":"signature","type":{"displayName":["String"],"type":2}},{"label":"message","type":{"displayName":["String"],"type":2}},{"label":"nft_id","type":{"displayName":["u8"],"type":1}}],"default":false,"docs":[],"label":"download_and_decrypt","mutates":false,"payable":false,"returnType":{"displayName":["ink","MessageResult"],"type":8},"selector":"0xd868db7a"}]},"storage":{"root":{"layout":{"struct":{"fields":[{"layout":{"leaf":{"key":"0x00000000","ty":0}},"name":"private_key"},{"layout":{"leaf":{"key":"0x00000000","ty":0}},"name":"salt"},{"layout":{"root":{"layout":{"leaf":{"key":"0x1d973feb","ty":2}},"root_key":"0x1d973feb"}},"name":"cid_map"},{"layout":{"leaf":{"key":"0x00000000","ty":3}},"name":"owner"}],"name":"ApillonContract"}},"root_key":"0x00000000"}},"types":[{"id":0,"type":{"def":{"sequence":{"type":1}}}},{"id":1,"type":{"def":{"primitive":"u8"}}},{"id":2,"type":{"def":{"primitive":"str"}}},{"id":3,"type":{"def":{"composite":{"fields":[{"type":4,"typeName":"[u8; 32]"}]}},"path":["ink_primitives","types","AccountId"]}},{"id":4,"type":{"def":{"array":{"len":32,"type":1}}}},{"id":5,"type":{"def":{"variant":{"variants":[{"fields":[{"type":6}],"index":0,"name":"Ok"},{"fields":[{"type":7}],"index":1,"name":"Err"}]}},"params":[{"name":"T","type":6},{"name":"E","type":7}],"path":["Result"]}},{"id":6,"type":{"def":{"tuple":[]}}},{"id":7,"type":{"def":{"variant":{"variants":[{"index":1,"name":"CouldNotReadInput"}]}},"path":["ink_primitives","LangError"]}},{"id":8,"type":{"def":{"variant":{"variants":[{"fields":[{"type":9}],"index":0,"name":"Ok"},{"fields":[{"type":7}],"index":1,"name":"Err"}]}},"params":[{"name":"T","type":9},{"name":"E","type":7}],"path":["Result"]}},{"id":9,"type":{"def":{"variant":{"variants":[{"fields":[{"type":2}],"index":0,"name":"Ok"},{"fields":[{"type":10}],"index":1,"name":"Err"}]}},"params":[{"name":"T","type":2},{"name":"E","type":10}],"path":["Result"]}},{"id":10,"type":{"def":{"variant":{"variants":[{"index":0,"name":"EcdhInvalidSecretKey"},{"index":1,"name":"EcdhInvalidPublicKey"},{"index":2,"name":"AESCannotEncrypt"},{"index":3,"name":"AESCannotDecrypt"},{"index":4,"name":"InvalidAddress"},{"index":5,"name":"BalanceOverflow"},{"index":6,"name":"FetchDataFailed"},{"index":7,"name":"FailedToGetBlockNumber"},{"index":8,"name":"RequestFailed"},{"index":9,"name":"Test"},{"index":10,"name":"NoPermission"}]}},"path":["rust_vault_snippets","error","ApillonError"]}}],"version":"4","phat":{"contractId":"0xe1b33f702f22b34eb9752fcfb61a3a92cd10d4b7ad93fcb0843ff5f8cad7d770"}}
+{
+  "source": {
+    "hash": "0xf2a6bb38f8fecc71ecf55cf6d803afa6a7501aab9615899cf64d8762ff26039d",
+    "language": "ink! 4.1.0",
+    "compiler": "rustc 1.68.2",
+    "build_info": {
+      "build_mode": "Debug",
+      "cargo_contract_version": "3.0.1",
+      "rust_toolchain": "stable-aarch64-apple-darwin",
+      "wasm_opt_settings": { "keep_debug_symbols": false, "optimization_passes": "Z" }
+    }
+  },
+  "contract": {
+    "name": "rust_vault_snippets",
+    "version": "0.1.0",
+    "authors": ["[your_name] <[your_email]>"]
+  },
+  "spec": {
+    "constructors": [
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "new",
+        "payable": false,
+        "returnType": { "displayName": ["ink_primitives", "ConstructorResult"], "type": 5 },
+        "selector": "0x9bae9d5e"
+      }
+    ],
+    "docs": [],
+    "environment": {
+      "accountId": { "displayName": [], "type": 6 },
+      "balance": { "displayName": [], "type": 6 },
+      "blockNumber": { "displayName": [], "type": 6 },
+      "chainExtension": { "displayName": [], "type": 6 },
+      "hash": { "displayName": [], "type": 6 },
+      "maxEventTopics": 0,
+      "timestamp": { "displayName": [], "type": 6 }
+    },
+    "events": [],
+    "lang_error": { "displayName": ["ink", "LangError"], "type": 7 },
+    "messages": [
+      {
+        "args": [{ "label": "file_content", "type": { "displayName": ["String"], "type": 2 } }],
+        "default": false,
+        "docs": [],
+        "label": "encrypt_content",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
+        "selector": "0xd3c77ae3"
+      },
+      {
+        "args": [
+          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } },
+          { "label": "cid", "type": { "displayName": ["String"], "type": 2 } }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "set_cid",
+        "mutates": true,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 5 },
+        "selector": "0xe7089a85"
+      },
+      {
+        "args": [{ "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } }],
+        "default": false,
+        "docs": [],
+        "label": "get_cid",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
+        "selector": "0x46a31eb3"
+      },
+      {
+        "args": [
+          { "label": "signature", "type": { "displayName": ["String"], "type": 2 } },
+          { "label": "message", "type": { "displayName": ["String"], "type": 2 } },
+          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "verify_nft_ownership",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 11 },
+        "selector": "0x501560e7"
+      },
+      {
+        "args": [
+          { "label": "signature", "type": { "displayName": ["String"], "type": 2 } },
+          { "label": "message", "type": { "displayName": ["String"], "type": 2 } },
+          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "download_and_decrypt",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
+        "selector": "0xd868db7a"
+      }
+    ]
+  },
+  "storage": {
+    "root": {
+      "layout": {
+        "struct": {
+          "fields": [
+            { "layout": { "leaf": { "key": "0x00000000", "ty": 0 } }, "name": "private_key" },
+            { "layout": { "leaf": { "key": "0x00000000", "ty": 0 } }, "name": "salt" },
+            {
+              "layout": {
+                "root": {
+                  "layout": { "leaf": { "key": "0x1d973feb", "ty": 2 } },
+                  "root_key": "0x1d973feb"
+                }
+              },
+              "name": "cid_map"
+            },
+            { "layout": { "leaf": { "key": "0x00000000", "ty": 3 } }, "name": "owner" }
+          ],
+          "name": "ApillonContract"
+        }
+      },
+      "root_key": "0x00000000"
+    }
+  },
+  "types": [
+    { "id": 0, "type": { "def": { "sequence": { "type": 1 } } } },
+    { "id": 1, "type": { "def": { "primitive": "u8" } } },
+    { "id": 2, "type": { "def": { "primitive": "str" } } },
+    {
+      "id": 3,
+      "type": {
+        "def": { "composite": { "fields": [{ "type": 4, "typeName": "[u8; 32]" }] } },
+        "path": ["ink_primitives", "types", "AccountId"]
+      }
+    },
+    { "id": 4, "type": { "def": { "array": { "len": 32, "type": 1 } } } },
+    {
+      "id": 5,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "fields": [{ "type": 6 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 7 }], "index": 1, "name": "Err" }
+            ]
+          }
+        },
+        "params": [
+          { "name": "T", "type": 6 },
+          { "name": "E", "type": 7 }
+        ],
+        "path": ["Result"]
+      }
+    },
+    { "id": 6, "type": { "def": { "tuple": [] } } },
+    {
+      "id": 7,
+      "type": {
+        "def": { "variant": { "variants": [{ "index": 1, "name": "CouldNotReadInput" }] } },
+        "path": ["ink_primitives", "LangError"]
+      }
+    },
+    {
+      "id": 8,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "fields": [{ "type": 9 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 7 }], "index": 1, "name": "Err" }
+            ]
+          }
+        },
+        "params": [
+          { "name": "T", "type": 9 },
+          { "name": "E", "type": 7 }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 9,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "fields": [{ "type": 2 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 10 }], "index": 1, "name": "Err" }
+            ]
+          }
+        },
+        "params": [
+          { "name": "T", "type": 2 },
+          { "name": "E", "type": 10 }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 10,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "index": 0, "name": "EcdhInvalidSecretKey" },
+              { "index": 1, "name": "EcdhInvalidPublicKey" },
+              { "index": 2, "name": "AESCannotEncrypt" },
+              { "index": 3, "name": "AESCannotDecrypt" },
+              { "index": 4, "name": "InvalidAddress" },
+              { "index": 5, "name": "BalanceOverflow" },
+              { "index": 6, "name": "FetchDataFailed" },
+              { "index": 7, "name": "FailedToGetBlockNumber" },
+              { "index": 8, "name": "RequestFailed" },
+              { "index": 9, "name": "Test" },
+              { "index": 10, "name": "NoPermission" }
+            ]
+          }
+        },
+        "path": ["rust_vault_snippets", "error", "ApillonError"]
+      }
+    },
+    {
+      "id": 11,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "fields": [{ "type": 12 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 7 }], "index": 1, "name": "Err" }
+            ]
+          }
+        },
+        "params": [
+          { "name": "T", "type": 12 },
+          { "name": "E", "type": 7 }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 12,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "fields": [{ "type": 13 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 10 }], "index": 1, "name": "Err" }
+            ]
+          }
+        },
+        "params": [
+          { "name": "T", "type": 13 },
+          { "name": "E", "type": 10 }
+        ],
+        "path": ["Result"]
+      }
+    },
+    { "id": 13, "type": { "def": { "primitive": "bool" } } }
+  ],
+  "version": "4",
+  "phat": { "contractId": "0xcf88487d992d8ff2eae80843d1372462d34dadcf8b5531821cffeb11fc2f39b6" }
+}
