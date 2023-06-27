@@ -85,10 +85,10 @@ import { ethers, BigNumber } from 'ethers';
 import type { AddressOrPair } from '@polkadot/api/types';
 import * as fs from 'file-saver';
 import { Buffer } from 'buffer';
-import axios, { FormDataVisitorHelpers } from 'axios';
-import { SvgNames } from '~/components/general/SvgInclude.vue';
-import { EncryptionState } from '~/config/types';
+import axios from 'axios';
 import { ref } from 'vue';
+import { SvgNames } from '@/components/general/SvgInclude.vue';
+import { EncryptionState } from '@/config/types';
 
 const walletLoading = ref<boolean>(false);
 const loadingNfts = ref<boolean>(false);

@@ -11,7 +11,6 @@ declare module 'vue' {
     Btn: typeof import('./components/general/Btn.vue')['default']
     DropFile: typeof import('./components/Form/DropFile.vue')['default']
     Header: typeof import('./components/Header.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     IconCommunity: typeof import('./components/icons/IconCommunity.vue')['default']
     IconDocumentation: typeof import('./components/icons/IconDocumentation.vue')['default']
     IconEcosystem: typeof import('./components/icons/IconEcosystem.vue')['default']
@@ -25,7 +24,5 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Spinner: typeof import('./components/Animation/Spinner.vue')['default']
     SvgInclude: typeof import('./components/general/SvgInclude.vue')['default']
-    TheWelcome: typeof import('./components/TheWelcome.vue')['default']
-    WelcomeItem: typeof import('./components/WelcomeItem.vue')['default']
   }
 }
