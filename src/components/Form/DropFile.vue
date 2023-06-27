@@ -68,7 +68,7 @@
           (But it didn't killt eh cat, either.)
         </p>
         <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>
-        <p v-else class="mb-0">Drag & drop your NFT key here.</p>
+        <p v-else class="mb-0">Drag & drop to update encrypted file</p>
       </label>
     </div>
   </div>

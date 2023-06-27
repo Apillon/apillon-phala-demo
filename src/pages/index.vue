@@ -17,6 +17,12 @@
           :name="nfts[0].name"
         />
       </div>
+      <div
+        v-else-if="nfts && nfts.length == 0 && encryptionState == EncryptionState.WALLET_CONNECTED"
+        class="absolute left-8 top-0 w-40"
+      >
+        <h4>You don't have any NFTs</h4>
+      </div>
     </div>
     <div class="overflow-auto" :style="contentMaxStyle">
       <div class="flex justify-center items-center" :style="contentMinStyle">
@@ -236,17 +242,16 @@ async function getCollectionInfo(): Promise<CollectionInfo> {
   };
 }
 
-async function fetchNFTs(balance: BigNumber | null | undefined, address = '') {
+async function fetchNFTs(balance: BigNumber | null | undefined) {
   nfts.value = [];
   if (!contract || !balance || balance.toNumber() === 0) {
     return;
   }
 
+  console.log('Address:  ');
   for (let i = 0; i < balance.toBigInt(); i++) {
     try {
-      let nftId = (
-        address ? await contract.tokenOfOwnerByIndex(address, i) : await contract.tokenByIndex(i)
-      ).toNumber();
+      let nftId = (await contract.tokenOfOwnerByIndex(await signer.getAddress(), i)).toNumber();
 
       const url = await contract.tokenURI(nftId);
       const metadata = await fetch(url).then(response => {
@@ -255,6 +260,7 @@ async function fetchNFTs(balance: BigNumber | null | undefined, address = '') {
       nfts.value.push({ id: nftId, ...metadata });
     } catch (e) {
       console.error(e);
+      encryptionState.value = EncryptionState.IDLE;
     }
   }
 }
