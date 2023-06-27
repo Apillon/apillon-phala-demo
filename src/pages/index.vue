@@ -2,7 +2,7 @@
   <div>
     <div ref="headerRef">
       <Header
-        :wallet-connected="!!address"
+        :wallet-connected="!!address || contract"
         :wallet-loading="walletLoading"
         @wallet-connect="connectWallet()"
       />
