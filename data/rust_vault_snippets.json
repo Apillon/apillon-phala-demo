@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0xf2a6bb38f8fecc71ecf55cf6d803afa6a7501aab9615899cf64d8762ff26039d",
+    "hash": "0x708ef5120c714ccd9db700ee949eb8251dcbce10b5da89c5fbc54343336dcf7c",
     "language": "ink! 4.1.0",
     "compiler": "rustc 1.68.2",
     "build_info": {
@@ -263,5 +263,5 @@
     { "id": 13, "type": { "def": { "primitive": "bool" } } }
   ],
   "version": "4",
-  "phat": { "contractId": "0xcf88487d992d8ff2eae80843d1372462d34dadcf8b5531821cffeb11fc2f39b6" }
+  "phat": { "contractId": "0x345cf39a54206962b29e22cce540b46ec4ddfc0ea654d4081d3cdbe3553e87c8" }
 }

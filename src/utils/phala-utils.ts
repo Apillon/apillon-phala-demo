@@ -13,7 +13,7 @@ const initPhalaContract = async function () {
   // Move to configuration
   const wsProvider = 'wss://poc5.phala.network/ws';
   const pruntimeURL = 'https://poc5.phala.network/tee-api-1';
-  const contractId = '0x01f1cfe2ffb7248d5eded100bcdebe51a9c11d7f6652b5160455d94b6d2b692a';
+  const contractId = '0x345cf39a54206962b29e22cce540b46ec4ddfc0ea654d4081d3cdbe3553e87c8';
 
   const provider = new WsProvider(wsProvider);
   const api = await ApiPromise.create({ provider, types });
@@ -45,6 +45,7 @@ export const setCid = async function (
 
   toast('Submitting transaction to Phala', { type: 'warning' });
 
+  console.log('NFT ID: ', nft_id);
   await contract.tx
     .setCid(options, nft_id, cid)
     .signAndSend(sender, { signer: injector.signer }, async (result: any) => {
@@ -107,6 +108,7 @@ export const downloadAndDecryptContent = async function (
 ) {
   toast('Decrypting and downloading file', { type: 'warning' });
 
+  console.log('NFT_ID', nft_id);
   const [certificate, contract] = await initPhalaContract();
 
   const response = await contract.query.downloadAndDecrypt(

@@ -64,8 +64,8 @@
         </div>
 
         <p v-if="state === EncryptionState.ERROR" class="mb-0">
-          Your curiosity dind't unlock the files. <br />
-          (But it didn't killt eh cat, either.)
+          Your curiosity didn't unlock the files. <br />
+          (But it didn't kill the cat, either.)
         </p>
         <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>
         <p v-else class="mb-0">Drag & drop to update encrypted file</p>

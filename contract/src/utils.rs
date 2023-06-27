@@ -44,7 +44,7 @@ pub mod utils {
         let phttp = PinkHttp::new("https://rpc.api.moonbeam.network/");
         let eth = Eth::new(phttp);
         
-        let addr = String::from("1e36B381647F557E43E5DC2A191E95C81221Ae01").parse().unwrap();
+        let addr = String::from("D412049ee57a2f83263248E2715e930E6E0780Cb").parse().unwrap();
         let contract = Contract::from_json(eth, addr, include_bytes!("../abis/moonbase_nft_abi.json")).unwrap();
 
         let query = "ownerOf";

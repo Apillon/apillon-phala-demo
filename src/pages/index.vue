@@ -17,12 +17,6 @@
           :name="nfts[0].name"
         />
       </div>
-      <div
-        v-else-if="nfts && nfts.length == 0 && encryptionState == EncryptionState.WALLET_CONNECTED"
-        class="absolute left-8 top-0 w-40"
-      >
-        <h4>You don't have any NFTs</h4>
-      </div>
     </div>
     <div class="overflow-auto" :style="contentMaxStyle">
       <div class="flex justify-center items-center" :style="contentMinStyle">
@@ -113,6 +107,7 @@ const fileUuid = ref('');
 const fileName = ref<string>('');
 const signature = ref<string>('');
 const hashedMessage = ref<string>('');
+const nftsLoaded = ref<boolean>(false);
 
 const ENV_CONFIG = ref(import.meta.env);
 const nfts = ref<Nft[]>([]);
@@ -220,6 +215,12 @@ async function loadAllNFTs() {
 
   if (collectionInfo.value) {
     await fetchNFTs(collectionInfo.value.totalSupply);
+
+    if (nftsLoaded.value == false) {
+      encryptionState.value = EncryptionState.ERROR;
+    } else {
+      encryptionState.value = EncryptionState.WALLET_CONNECTED;
+    }
   }
   loadingNfts.value = false;
 }
@@ -248,7 +249,7 @@ async function fetchNFTs(balance: BigNumber | null | undefined) {
     return;
   }
 
-  console.log('Address:  ');
+  console.log('Checking address ');
   for (let i = 0; i < balance.toBigInt(); i++) {
     try {
       let nftId = (await contract.tokenOfOwnerByIndex(await signer.getAddress(), i)).toNumber();
@@ -258,8 +259,8 @@ async function fetchNFTs(balance: BigNumber | null | undefined) {
         return response.json();
       });
       nfts.value.push({ id: nftId, ...metadata });
+      nftsLoaded.value = true;
     } catch (e) {
-      console.error(e);
       encryptionState.value = EncryptionState.IDLE;
     }
   }
@@ -371,6 +372,8 @@ async function phalaDownloadAndDecrypt() {
     hashedMessage.value,
     nfts.value[0].id
   );
+
+  console.log('Decrypted file: ', decrypted);
 
   try {
     writeFile(decrypted.output.toJSON().ok.ok);
