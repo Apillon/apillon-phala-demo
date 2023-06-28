@@ -124,9 +124,9 @@ const config = {
   NFT_ADDRESS: ENV_CONFIG.value.VITE_NFT_ADDRESS,
 };
 
-let apiKey = '4ba34873-fdd2-4b0f-a383-05303bd0e615';
-let apiSecret = '*AHM5#u0uoev';
-let bucketUuid = 'f4833a8c-f010-4bc5-aa48-4b5223bd2ff5';
+let apiKey = '1a9202b6-6f2a-45c4-90a1-bcff3fe6a351';
+let apiSecret = '8rZn4tLx5CBu';
+let bucketUuid = 'af33d290-28b8-4263-b9f3-b2408d854916';
 let creds = apiKey + ':' + apiSecret;
 let credsB64Encoded = Buffer.from(creds).toString('base64');
 
@@ -188,10 +188,8 @@ async function verifyOwner() {
   }
 }
 
-async function setPhalaCid() {
+async function setPhalaCid(cid: String) {
   toast('Data synced. Setting CID in Phala', { type: 'warning' });
-
-  let cid = ipfsCid.value.toString();
   let nft_id = nfts.value[0].id;
 
   if (nft_id != undefined) {
@@ -272,7 +270,7 @@ async function uploadFiles(content: String) {
   try {
     const uploadResponse = await axios({
       method: 'post',
-      url: `https://api-dev.apillon.io/storage/${bucketUuid}/upload`,
+      url: `https://api.apillon.io/storage/${bucketUuid}/upload`,
       headers: {
         Authorization: `Basic ${credsB64Encoded}`,
         'Content-Type': 'application/json; charset=utf-8',
@@ -299,7 +297,7 @@ async function uploadFiles(content: String) {
       data: content,
     });
 
-    let endUploadUrl = `https://api-dev.apillon.io/storage/${bucketUuid}/upload/${sessionUuid}/end`;
+    let endUploadUrl = `https://api.apillon.io/storage/${bucketUuid}/upload/${sessionUuid}/end`;
     await axios({
       method: 'post',
       url: endUploadUrl,
@@ -331,7 +329,7 @@ function verifyFileSyncedToIPFS() {
 }
 
 async function checkFileStatus() {
-  let fileUrl = `https://api-dev.apillon.io/storage/${bucketUuid}/file/${fileUuid.value}/detail`;
+  let fileUrl = `https://api.apillon.io/storage/${bucketUuid}/file/${fileUuid.value}/detail`;
   const response = await axios({
     method: 'get',
     url: fileUrl,
@@ -347,7 +345,7 @@ async function checkFileStatus() {
     ipfsCid.value = cid;
     console.log('CID ', cid);
     clearInterval(setIntervalRef.value);
-    setPhalaCid();
+    setPhalaCid(ipfsCid.value);
 
     return true;
   }

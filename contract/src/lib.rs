@@ -68,10 +68,6 @@ mod phat_crypto {
 
         #[ink(message)]
         pub fn set_cid(&mut self, nft_id: u8, cid: String) {
-            if self.env().caller() != self.owner {
-                // TODO: This does not currently work
-                core::panic!("caller {:?}, owner {:?}", self.env().caller(), self.owner)
-            }
             self.cid_map.insert(nft_id, &cid);
         }
 
