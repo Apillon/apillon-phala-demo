@@ -143,6 +143,10 @@ const contentMaxStyle = computed(() => {
   };
 });
 
+onMounted(() => {
+  console.log('Phala demo init ...');
+});
+
 async function connectWallet() {
   walletLoading.value = true;
   [signer, provider] = await connectMetamaskWallet();
