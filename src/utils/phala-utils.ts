@@ -13,7 +13,7 @@ const initPhalaContract = async function () {
   // Move to configuration
   const wsProvider = 'wss://poc5.phala.network/ws';
   const pruntimeURL = 'https://poc5.phala.network/tee-api-1';
-  const contractId = '0x07a2ad7d1e720bf57b46483c711712fd5d866fc476405feae6b1f79087da3ef9';
+  const contractId = '0xb05474b1d9800d471b2af077c22ca0e62c5de80cb38fd79b490899acece7d21b';
 
   const provider = new WsProvider(wsProvider);
   const api = await ApiPromise.create({ provider, types });
@@ -78,6 +78,16 @@ export const verifyNftOwnership = async function (
     message,
     nft_id
   );
+
+  return response.output.toJSON().ok.ok;
+};
+
+export const verifyContractOwnership = async function () {
+  toast('Verifying NFT ownership', { type: 'warning' });
+
+  const [certificate, contract] = await initPhalaContract();
+
+  const response = await contract.query.testOwnership(certificate, {});
 
   return response.output.toJSON().ok.ok;
 };

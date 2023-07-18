@@ -275,6 +275,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const verifyContractOwnership: typeof import('./utils/phala-utils')['verifyContractOwnership']
   const verifyNftOwnership: typeof import('./utils/phala-utils')['verifyNftOwnership']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']

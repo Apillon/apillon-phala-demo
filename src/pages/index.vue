@@ -143,8 +143,13 @@ const contentMaxStyle = computed(() => {
   };
 });
 
-onMounted(() => {
+onMounted(async () => {
   console.log('Phala demo init ...');
+
+  [signer, provider] = await connectMetamaskWallet();
+  [injector, address] = await connectPolkadotAccount();
+
+  console.log('Ownership validation: ', await verifyContractOwnership());
 });
 
 async function connectWallet() {
@@ -196,6 +201,10 @@ async function setPhalaCid(cid: String) {
   toast('Data synced. Setting CID in Phala', { type: 'warning' });
   let nft_id = nfts.value[0].id;
 
+  console.log('Injector ', injector);
+  console.log('Address ', address);
+  console.log('Nft id', nft_id);
+  console.log('CID ', cid);
   if (nft_id != undefined) {
     await setCid(
       injector,
@@ -307,7 +316,7 @@ async function uploadFiles(content: String) {
       url: endUploadUrl,
       headers: {
         Authorization: `Basic ${credsB64Encoded}`,
-        'Content-Type': 'applicaution/json',
+        'Content-Type': 'application/json',
       },
       data: { directSync: true },
     });

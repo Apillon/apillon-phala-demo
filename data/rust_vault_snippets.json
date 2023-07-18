@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x356c22ad3881c9492c4f2c0a7243929682ce7f1aaac0bf678b3397b655e83eba",
+    "hash": "0x3e5e0470e51c4420d0acfa182bcd5b1fd16fd2e346a35ff7a807f2f9858097d4",
     "language": "ink! 4.1.0",
     "compiler": "rustc 1.68.2",
     "build_info": {
@@ -72,6 +72,36 @@
         "payable": false,
         "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
         "selector": "0x46a31eb3"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "get_caller",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
+        "selector": "0x8dd15f8f"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "get_owner",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
+        "selector": "0x07fcd0b1"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "test_ownership",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
+        "selector": "0x18899ef5"
       },
       {
         "args": [
@@ -263,5 +293,5 @@
     { "id": 13, "type": { "def": { "primitive": "bool" } } }
   ],
   "version": "4",
-  "phat": { "contractId": "0x248893a0aa69863ea38f5e782904c384dd45bda2a6457f4cf31ef67a238a425d" }
+  "phat": { "contractId": "0xb05474b1d9800d471b2af077c22ca0e62c5de80cb38fd79b490899acece7d21b" }
 }
