@@ -37,12 +37,14 @@ mod phat_crypto {
         private_key: Vec<u8>,
         salt: Vec<u8>,
         cid_map: Mapping<NftId, Cid>,
-        owner: AccountId
+        owner: AccountId,
+        owner_restriction: bool,
+        contract_id: String
     }
 
     impl ApillonContract {
         #[ink(constructor)]
-        pub fn new() -> Self {
+        pub fn new(contract_id: String, owner_restriction: bool) -> Self {
             // Default constructor
             let salt = b"981781668367".to_vec();
             let private_key = derive_sr25519_key(&salt);
@@ -50,7 +52,7 @@ mod phat_crypto {
             let cid_map = Mapping::default();
 
             Self {
-                private_key, salt, cid_map, owner,
+                private_key, salt, cid_map, owner, contract_id, owner_restriction
             }
         }
 
@@ -99,13 +101,13 @@ mod phat_crypto {
         
         #[ink(message)]
         pub fn verify_nft_ownership(&self, signature: String, message: String, nft_id: u8) -> CustomResult<bool> {
-            let is_owner = verify_nft_ownership(signature, message, nft_id);
+            let is_owner = verify_nft_ownership(signature, message, nft_id, &self.contract_id);
             Ok(is_owner)
         }
 
         #[ink(message)]
         pub fn download_and_decrypt(&self, signature: String, message: String, nft_id: u8) -> CustomResult<String> {
-            let is_owner = verify_nft_ownership(signature, message, nft_id);
+            let is_owner = verify_nft_ownership(signature, message, nft_id, &self.contract_id);
 
             if is_owner == true {
                 let cid = self.cid_map.get(nft_id).unwrap();
