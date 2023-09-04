@@ -52,7 +52,7 @@ mod phat_crypto {
             let cid_map = Mapping::default();
 
             Self {
-                private_key, salt, cid_map, owner, contract_id, 
+                private_key, salt, cid_map, owner, contract_id, owner_restriction
             }
         }
 
@@ -87,6 +87,16 @@ mod phat_crypto {
         pub fn verify_nft_ownership(&self, signature: String, message: String, nft_id: u8) -> CustomResult<bool> {
             let is_owner = verify_nft_ownership(signature, message, nft_id, &self.contract_id);
             Ok(is_owner)
+        }
+
+        #[ink(message)]
+        pub fn test_request(&self) -> CustomResult<String> {
+            let response = http_get!(format!("https://www.google.com"));
+            let resp_body_str = match String::from_utf8(response.body) {
+                Ok(value) => value,
+                Err(e) => panic!("Mja, error, kaj ces {}", e),
+            };
+            Ok(resp_body_str)
         }
 
         #[ink(message)]
