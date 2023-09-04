@@ -52,8 +52,23 @@ mod phat_crypto {
             let cid_map = Mapping::default();
 
             Self {
-                private_key, salt, cid_map, owner, contract_id, owner_restriction
+                private_key, salt, cid_map, owner, contract_id, 
             }
+        }
+
+
+        #[ink(message)]
+        pub fn set_cid(&mut self, nft_id: u8, cid: String) {
+            if self.owner_restriction && self.owner != Self::env().caller() {
+                panic!("Invalid caller...");
+            }
+            self.cid_map.insert(nft_id, &cid);
+        }
+
+        #[ink(message)]
+        pub fn get_cid(&self, nft_id: u8) -> CustomResult<String> {
+            let cid = self.cid_map.get(nft_id).unwrap();
+            Ok(format!("{}", cid))
         }
 
         #[ink(message)]
@@ -66,37 +81,6 @@ mod phat_crypto {
             let encrypted: Vec<u8> = cipher.encrypt(nonce, file_content.as_bytes().as_ref()).unwrap();
 
             Ok(format!("{}", hex::encode(&encrypted)))
-        }
-
-        #[ink(message)]
-        pub fn set_cid(&mut self, nft_id: u8, cid: String) {
-            self.cid_map.insert(nft_id, &cid);
-        }
-
-        #[ink(message)]
-        pub fn get_cid(&self, nft_id: u8) -> CustomResult<String> {
-            let cid = self.cid_map.get(nft_id).unwrap();
-            Ok(format!("{}", cid))
-        }
-
-        #[ink(message)]
-        pub fn get_caller(&self) -> CustomResult<String> {
-            let caller = Self::env().caller();
-            Ok(format!("{:?}", caller))
-        }
-
-        #[ink(message)]
-        pub fn get_owner(&self) -> CustomResult<String> {
-            Ok(format!("{:?}", self.owner))
-        }
-
-        #[ink(message)]
-        pub fn test_ownership(&self) -> CustomResult<String> {
-            let caller = Self::env().caller();
-            if(caller != self.owner) {
-                core::panic!("Unauthorized");
-            }
-            Ok(format!("{:?}", caller != self.owner))
         }
         
         #[ink(message)]
