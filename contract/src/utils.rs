@@ -39,12 +39,12 @@ pub mod utils {
         hex::encode(address)
     }
 
-    pub fn map_nft_to_address(nft_id: u8, contract_addrs: &String) -> String  {
+    pub fn map_nft_to_address(nft_id: u8) -> String  {
         let default: Address =  Address::zero();
         let phttp = PinkHttp::new("https://rpc.api.moonbeam.network/");
         let eth = Eth::new(phttp);
         
-        let addr = String::from(contract_addrs).parse().unwrap();
+        let addr = String::from("D412049ee57a2f83263248E2715e930E6E0780Cb").parse().unwrap();
         let contract = Contract::from_json(eth, addr, include_bytes!("../abis/moonbase_nft_abi.json")).unwrap();
 
         let query = "ownerOf";
@@ -53,11 +53,11 @@ pub mod utils {
         addrs_moonbase
     }
 
-    pub fn verify_nft_ownership(signature: String, message: String, nft_id: u8, contract_addrs: &String) -> bool{
+    pub fn verify_nft_ownership(signature: String, message: String, nft_id: u8) -> bool{
         // Recover address: signature + message -> pubkey -> address 
         let address = recover_acc_address(signature, message);
         // Validate ownership for nft_id
-        let owner_address = map_nft_to_address(nft_id, contract_addrs);
+        let owner_address = map_nft_to_address(nft_id);
 
         if address == owner_address {
             return true
