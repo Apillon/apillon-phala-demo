@@ -148,8 +148,6 @@ onMounted(async () => {
 
   [signer, provider] = await connectMetamaskWallet();
   [injector, address] = await connectPolkadotAccount();
-
-  console.log('Ownership validation: ', await verifyContractOwnership());
 });
 
 async function connectWallet() {
@@ -378,6 +376,7 @@ async function uploadAndEncryptFile() {
 
 async function phalaDownloadAndDecrypt() {
   loadingDownload.value = true;
+
   const decrypted = await downloadAndDecryptContent(
     signature.value,
     hashedMessage.value,
