@@ -273,5 +273,5 @@
     { "id": 13, "type": { "def": { "primitive": "bool" } } }
   ],
   "version": "4",
-  "phat": { "contractId": "0xd982872fd15b7579c4c45621f24b10a92786a82be1d9bd1f698c61944357489b" }
+  "phat": { "contractId": "0x799d4433d296692e48960cf5145626ef6e56337392f041ca14f94921c68438cf" }
 }
