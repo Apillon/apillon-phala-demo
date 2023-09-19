@@ -100,7 +100,7 @@ mod phat_crypto {
             if is_owner == true {
                 let cid = self.cid_map.get(nft_id).unwrap();
                 let response = http_get!(
-                    format!("https://ipfs-dev.apillon.io/ipfs/{}", cid));
+                    format!("https://ipfs.apillon.io/ipfs/{}", cid));
 
                 let resp_body_str = match String::from_utf8(response.body) {
                     Ok(value) => value,

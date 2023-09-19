@@ -53,7 +53,7 @@
             <Btn
               type="link"
               class="inline-block"
-              :href="`https://ipfs2.apillon.io/ipfs/${ipfsCid}`"
+              :href="`https://ipfs.apillon.io/ipfs/${ipfsCid}`"
               target="_blank"
             >
               {{ ipfsCid }}
