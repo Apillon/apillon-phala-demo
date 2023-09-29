@@ -57,7 +57,7 @@ mod phat_crypto {
         }
 
         #[ink(message)]
-        pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String>{
+        pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String> {
             if self.owner_restriction && self.owner != Self::env().caller() {
                 Ok(format!("INVALID"))
             } else {
@@ -73,6 +73,16 @@ mod phat_crypto {
         }
 
         #[ink(message)]
+        pub fn set_owner(&mut self) -> CustomResult<String> {
+            if self.owner != Self::env().caller() {
+                Ok(format!("INVALID"))
+            } else {
+                self.owner = Self::env().caller();
+                Ok(format!("New owner set {:?}", self.owner))
+            }
+        }
+
+        #[ink(message)]
         pub fn encrypt_content(&self, file_content: String) -> CustomResult<String> {
             let key: &GenericArray<u8, U32> = GenericArray::from_slice(&self.private_key[..32]);
             let nonce: &GenericArray<u8, U12> = Nonce::<Aes256GcmSiv>::from_slice(&self.salt);
@@ -83,16 +93,12 @@ mod phat_crypto {
 
             Ok(format!("{}", hex::encode(&encrypted)))
         }
-        
-        #[ink(message)]
-        pub fn verify_nft_ownership(&self, signature: String, message: String, nft_id: u8) -> CustomResult<bool> {
-            let is_owner = verify_nft_ownership(signature, message, nft_id);
-            Ok(is_owner)
-        }
 
         #[ink(message)]
         pub fn download_and_decrypt(&self, signature: String, message: String, nft_id: u8) -> CustomResult<String> {
-            let is_owner = verify_nft_ownership(signature, message, nft_id);
+            
+            let is_owner = verify_nft_ownership(
+                signature, message, nft_id, String::from(&self.contract_id));
 
             if is_owner == true {
                 let cid = self.cid_map.get(nft_id).unwrap();
