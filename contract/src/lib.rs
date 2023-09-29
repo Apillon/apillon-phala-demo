@@ -37,12 +37,14 @@ mod phat_crypto {
         private_key: Vec<u8>,
         salt: Vec<u8>,
         cid_map: Mapping<NftId, Cid>,
-        owner: AccountId
+        owner: AccountId,
+        owner_restriction: bool,
+        contract_id: String
     }
 
     impl ApillonContract {
         #[ink(constructor)]
-        pub fn new() -> Self {
+        pub fn new(contract_id: String, owner_restriction: bool) -> Self {
             // Default constructor
             let salt = b"981781668367".to_vec();
             let private_key = derive_sr25519_key(&salt);
@@ -50,7 +52,7 @@ mod phat_crypto {
             let cid_map = Mapping::default();
 
             Self {
-                private_key, salt, cid_map, owner
+                private_key, salt, cid_map, owner, contract_id, owner_restriction
             }
         }
 
@@ -81,16 +83,6 @@ mod phat_crypto {
         pub fn verify_nft_ownership(&self, signature: String, message: String, nft_id: u8) -> CustomResult<bool> {
             let is_owner = verify_nft_ownership(signature, message, nft_id);
             Ok(is_owner)
-        }
-
-        #[ink(message)]
-        pub fn test_request(&self) -> CustomResult<String> {
-            let response = http_get!(format!("https://www.google.com"));
-            let resp_body_str = match String::from_utf8(response.body) {
-                Ok(value) => value,
-                Err(e) => panic!("Mja, error, kaj ces {}", e),
-            };
-            Ok(resp_body_str)
         }
 
         #[ink(message)]
@@ -127,13 +119,15 @@ mod phat_crypto {
 
     #[cfg(test)]
     mod tests {
-        use core::panic;
+        // use core::panic;
+        // use ink_lang as ink;
 
-        use super::*;
+        // use super::*;
 
-        // TODO: TEST!!!!!!!!!!!!! This is a demo, but heck if this gets in production, tests must be written
-        // BEFORE the contract is deployed!!!! If someone does not do it this way, I will personally terminate them
-
+        // #[ink_e2e::test]
+        // async fn test_cid_set(mut client: ink_e2e::Client<C, E>) -> E2EResult<()> {
+        //     Ok(())
+        // }
     }
 
 }
