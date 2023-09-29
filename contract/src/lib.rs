@@ -39,12 +39,13 @@ mod phat_crypto {
         cid_map: Mapping<NftId, Cid>,
         owner: AccountId,
         owner_restriction: bool,
-        contract_id: String
+        contract_id: String,
+        rpc_api: String
     }
 
     impl ApillonContract {
         #[ink(constructor)]
-        pub fn new(contract_id: String, owner_restriction: bool) -> Self {
+        pub fn new(contract_id: String, rpc_api: String, owner_restriction: bool) -> Self {
             // Default constructor
             let salt = b"981781668367".to_vec();
             let private_key = derive_sr25519_key(&salt);
@@ -52,7 +53,7 @@ mod phat_crypto {
             let cid_map = Mapping::default();
 
             Self {
-                private_key, salt, cid_map, owner, contract_id, owner_restriction
+                private_key, salt, cid_map, owner, contract_id, owner_restriction, rpc_api
             }
         }
 
