@@ -18,7 +18,7 @@ mod phat_crypto {
     use alloc::{vec::Vec, string::String, format};
 
     use crate::error::ApillonError;
-    use utils::utils::{recover_acc_address, verify_nft_ownership};
+    use utils::utils::verify_nft_ownership;
 
     use ink_storage::Mapping;
     use aes_gcm_siv::{
@@ -57,8 +57,13 @@ mod phat_crypto {
         }
 
         #[ink(message)]
-        pub fn set_cid(&mut self, nft_id: u8, cid: String) {
-            self.cid_map.insert(nft_id, &cid);
+        pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String>{
+            if self.owner_restriction && self.owner != Self::env().caller() {
+                Ok(format!("INVALID"))
+            } else {
+                self.cid_map.insert(nft_id, &cid);
+                Ok(String::from("Ok"))
+            }
         }
 
         #[ink(message)]
