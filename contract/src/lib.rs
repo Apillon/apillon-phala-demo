@@ -40,12 +40,13 @@ mod phat_crypto {
         owner: AccountId,
         owner_restriction: bool,
         contract_id: String,
-        rpc_api: String
+        rpc_api: String,
+        ipfs_endpoint: String
     }
 
     impl ApillonContract {
         #[ink(constructor)]
-        pub fn new(contract_id: String, rpc_api: String, owner_restriction: bool) -> Self {
+        pub fn new(contract_id: String, rpc_api: String, ipfs_endpoint: String, owner_restriction: bool) -> Self {
             // Default constructor
             let salt = b"981781668367".to_vec();
             let private_key = derive_sr25519_key(&salt);
@@ -53,7 +54,7 @@ mod phat_crypto {
             let cid_map = Mapping::default();
 
             Self {
-                private_key, salt, cid_map, owner, contract_id, owner_restriction, rpc_api
+                private_key, salt, cid_map, owner, contract_id, owner_restriction, rpc_api, ipfs_endpoint
             }
         }
 
@@ -98,13 +99,17 @@ mod phat_crypto {
         #[ink(message)]
         pub fn download_and_decrypt(&self, signature: String, message: String, nft_id: u8) -> CustomResult<String> {
             
+            let contract_id = String::from(&self.contract_id);
+            let rpc_api = String::from(&self.rpc_api);
+            let ipfs_endpoint = String::from(&self.ipfs_endpoint);
+
             let is_owner = verify_nft_ownership(
-                signature, message, nft_id, String::from(&self.contract_id));
+                signature, message, nft_id, contract_id, rpc_api);
 
             if is_owner == true {
                 let cid = self.cid_map.get(nft_id).unwrap();
                 let response = http_get!(
-                    format!("https://ipfs.apillon.io/ipfs/{}", cid));
+                    format!("{}/{}", ipfs_endpoint, cid));
 
                 let resp_body_str = match String::from_utf8(response.body) {
                     Ok(value) => value,
