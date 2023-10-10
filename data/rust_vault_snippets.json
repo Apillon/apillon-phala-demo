@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x63c9d44d91ed5353f94b3fe3b930f539708b3c596c75e1faa0fe79842306140b",
+    "hash": "0xa046c68461556505e4bd7169e36f4365ab227c312caada20e7355e030e3743a1",
     "language": "ink! 4.1.0",
     "compiler": "rustc 1.69.0-nightly",
     "build_info": {
@@ -87,6 +87,20 @@
         "payable": false,
         "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
         "selector": "0x367facd6"
+      },
+      {
+        "args": [
+          { "label": "signature", "type": { "displayName": ["String"], "type": 2 } },
+          { "label": "message", "type": { "displayName": ["String"], "type": 2 } },
+          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "verify_nft_ownership",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 12 },
+        "selector": "0x501560e7"
       },
       {
         "args": [{ "label": "file_content", "type": { "displayName": ["String"], "type": 2 } }],
@@ -239,8 +253,44 @@
         },
         "path": ["rust_vault_snippets", "error", "ApillonError"]
       }
+    },
+    {
+      "id": 12,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "fields": [{ "type": 13 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 8 }], "index": 1, "name": "Err" }
+            ]
+          }
+        },
+        "params": [
+          { "name": "T", "type": 13 },
+          { "name": "E", "type": 8 }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 13,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "fields": [{ "type": 5 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 11 }], "index": 1, "name": "Err" }
+            ]
+          }
+        },
+        "params": [
+          { "name": "T", "type": 5 },
+          { "name": "E", "type": 11 }
+        ],
+        "path": ["Result"]
+      }
     }
   ],
   "version": "4",
-  "phat": { "contractId": "0x910c35acb4f51ffcb05aa6f649bb272dc539e7a9c073f6ecad99f131b5d551a8" }
+  "phat": { "contractId": "0xaaedd356f1257e2e7ff4a0d25b5bf21ac1c5aa40121fbff8a9a5e6f7904e5a36" }
 }

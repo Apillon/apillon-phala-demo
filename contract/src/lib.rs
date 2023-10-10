@@ -93,6 +93,15 @@ mod phat_crypto {
         }
 
         #[ink(message)]
+        pub fn verify_nft_ownership(&self, signature: String, message: String, nft_id: u8) -> CustomResult<bool> {
+            let contract_id = String::from(&self.contract_id);
+            let rpc_api = String::from(&self.rpc_api);
+
+            let is_owner = verify_nft_ownership(signature, message, nft_id, contract_id, rpc_api);
+            Ok(is_owner)
+        }
+
+        #[ink(message)]
         pub fn encrypt_content(&self, file_content: String) -> CustomResult<String> {
             let key: &GenericArray<u8, U32> = GenericArray::from_slice(&self.private_key[..32]);
             let nonce: &GenericArray<u8, U12> = Nonce::<Aes256GcmSiv>::from_slice(&self.salt);
