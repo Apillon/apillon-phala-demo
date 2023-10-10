@@ -9,7 +9,6 @@ use pink_web3::{
         pink_http::PinkHttp,
         resolve_ready
     },
-    contract::tokens::Detokenize,
     api::{Eth, Namespace}
 };
 
@@ -33,6 +32,7 @@ pub mod utils {
 
         let mut pub_key = [0u8; 33];
         let mut address = [0u8; 20];
+        
         ecdsa_recover(&signature, &message_hash, &mut pub_key).unwrap();
         ecdsa_to_eth_address(&mut pub_key, &mut address).unwrap();
 
