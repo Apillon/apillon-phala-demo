@@ -69,6 +69,14 @@ mod phat_crypto {
         }
 
         #[ink(message)]
+        pub fn test_get_data(&self) -> CustomResult<String> {
+            let data = String::from(
+                format!("owner {:?}, owner_restriction {:?}, contract_id {:?}, rpc_api {:?}, ipfs_endpoint {:?}", 
+                    self.owner, self.owner_restriction, self.contract_id, self.rpc_api, self.ipfs_endpoint));
+            Ok(data)
+        }
+
+        #[ink(message)]
         pub fn get_cid(&self, nft_id: u8) -> CustomResult<String> {
             let cid = self.cid_map.get(nft_id).unwrap();
             Ok(format!("{}", cid))
