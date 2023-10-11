@@ -37,7 +37,7 @@ mod phat_crypto {
         private_key: Vec<u8>,
         salt: Vec<u8>,
         cid_map: Mapping<NftId, Cid>,
-        owner: AccountId,
+        owner: String,
         owner_restriction: bool,
         contract_id: String,
         rpc_api: String,
@@ -50,7 +50,7 @@ mod phat_crypto {
             // Default constructor
             let salt = b"981781668367".to_vec();
             let private_key = derive_sr25519_key(&salt);
-            let owner = Self::env().caller();
+            let owner = String::from(format!("{:?}", Self::env().caller()));
             let cid_map = Mapping::default();
 
             Self {
@@ -58,14 +58,21 @@ mod phat_crypto {
             }
         }
 
+        // #[ink(message)]
+        // pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String> {
+        //     if self.owner_restriction == true && self.owner != Self::env().caller() {
+        //         Ok(format!("INVALID"))
+        //     } else {
+        //         self.cid_map.insert(nft_id, &cid);
+        //         Ok(String::from("Ok"))
+        //     }
+        // }
+
         #[ink(message)]
-        pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String> {
-            if self.owner_restriction && self.owner != Self::env().caller() {
-                Ok(format!("INVALID"))
-            } else {
-                self.cid_map.insert(nft_id, &cid);
-                Ok(String::from("Ok"))
-            }
+        pub fn test_caller(&self) -> CustomResult<String> {
+            let owner = String::from(format!("{:?}", &self.owner));
+            let caller = String::from(format!("{:?}", Self::env().caller()));
+            Ok(format!("Owner: {:?}, caller: {:?}", &owner, &caller))
         }
 
         #[ink(message)]
@@ -84,10 +91,13 @@ mod phat_crypto {
 
         #[ink(message)]
         pub fn set_owner(&mut self) -> CustomResult<String> {
-            if self.owner != Self::env().caller() {
+            let owner = String::from(format!("{:?}", &self.owner));
+            let caller = String::from(format!("{:?}", Self::env().caller()));
+
+            if owner != caller {
                 Ok(format!("INVALID"))
             } else {
-                self.owner = Self::env().caller();
+                self.owner = caller;
                 Ok(format!("New owner set {:?}", self.owner))
             }
         }

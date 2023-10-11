@@ -18,6 +18,13 @@
         />
       </div>
     </div>
+
+    <Btn type="primary" :loading="loadingDownload" @click="testSetPhalaCid()"> Set CID </Btn>
+    <Btn type="primary" :loading="loadingDownload" @click="verifyTx()"> Get CID </Btn>
+    <Btn type="primary" :loading="loadingDownload" @click="testData()">Test data </Btn>
+    <Btn type="primary" :loading="loadingDownload" @click="testOwnerCaller()">Test caller </Btn>
+    <Btn type="primary" :loading="loadingDownload" @click="testSetOwner()">Set owner </Btn>
+
     <div class="overflow-auto" :style="contentMaxStyle">
       <div class="flex justify-center items-center" :style="contentMinStyle">
         <div class="relative pb-24">
@@ -195,13 +202,30 @@ async function verifyOwner() {
   }
 }
 
+async function testSetPhalaCid() {
+  console.log('Address: ', address);
+  await setCid(
+    injector,
+    address as AddressOrPair,
+    2,
+    'Tralalala',
+    (msg: string, finished: boolean) => {
+      toast(msg, { type: 'warning' });
+      if (finished) {
+        loadingUpload.value = false;
+      }
+    }
+  );
+}
+
 async function setPhalaCid(cid: String) {
+  console.log('Address: ', address);
   toast('Data synced. Setting CID in Phala', { type: 'warning' });
   let nft_id = nfts.value[0].id;
 
   console.log('Injector ', injector);
   console.log('Address ', address);
-  console.log('Nft id', nft_id);
+  console.log('Nft ID', nft_id);
   console.log('CID ', cid);
   if (nft_id != undefined) {
     await setCid(
@@ -217,6 +241,22 @@ async function setPhalaCid(cid: String) {
       }
     );
   }
+}
+
+async function testSetOwner() {
+  await contractSetOwner();
+}
+
+async function testOwnerCaller() {
+  await getOwnerCaller();
+}
+
+async function verifyTx() {
+  await verifyContractOwnership();
+}
+
+async function testData() {
+  await getTestData();
 }
 
 async function loadAllNFTs() {

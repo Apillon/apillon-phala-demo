@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0xa046c68461556505e4bd7169e36f4365ab227c312caada20e7355e030e3743a1",
+    "hash": "0x4778bab9617488c3d3e31b44558e8bd16a5ca6acd779199d3544b8fba8ee9942",
     "language": "ink! 4.1.0",
     "compiler": "rustc 1.69.0-nightly",
     "build_info": {
@@ -22,41 +22,38 @@
           { "label": "contract_id", "type": { "displayName": ["String"], "type": 2 } },
           { "label": "rpc_api", "type": { "displayName": ["String"], "type": 2 } },
           { "label": "ipfs_endpoint", "type": { "displayName": ["String"], "type": 2 } },
-          { "label": "owner_restriction", "type": { "displayName": ["bool"], "type": 5 } }
+          { "label": "owner_restriction", "type": { "displayName": ["bool"], "type": 3 } }
         ],
         "default": false,
         "docs": [],
         "label": "new",
         "payable": false,
-        "returnType": { "displayName": ["ink_primitives", "ConstructorResult"], "type": 6 },
+        "returnType": { "displayName": ["ink_primitives", "ConstructorResult"], "type": 4 },
         "selector": "0x9bae9d5e"
       }
     ],
     "docs": [],
     "environment": {
-      "accountId": { "displayName": [], "type": 7 },
-      "balance": { "displayName": [], "type": 7 },
-      "blockNumber": { "displayName": [], "type": 7 },
-      "chainExtension": { "displayName": [], "type": 7 },
-      "hash": { "displayName": [], "type": 7 },
+      "accountId": { "displayName": [], "type": 5 },
+      "balance": { "displayName": [], "type": 5 },
+      "blockNumber": { "displayName": [], "type": 5 },
+      "chainExtension": { "displayName": [], "type": 5 },
+      "hash": { "displayName": [], "type": 5 },
       "maxEventTopics": 0,
-      "timestamp": { "displayName": [], "type": 7 }
+      "timestamp": { "displayName": [], "type": 5 }
     },
     "events": [],
-    "lang_error": { "displayName": ["ink", "LangError"], "type": 8 },
+    "lang_error": { "displayName": ["ink", "LangError"], "type": 6 },
     "messages": [
       {
-        "args": [
-          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } },
-          { "label": "cid", "type": { "displayName": ["String"], "type": 2 } }
-        ],
+        "args": [],
         "default": false,
         "docs": [],
-        "label": "set_cid",
-        "mutates": true,
+        "label": "test_caller",
+        "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
-        "selector": "0xe7089a85"
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 7 },
+        "selector": "0x83ef83da"
       },
       {
         "args": [],
@@ -65,7 +62,7 @@
         "label": "test_get_data",
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 7 },
         "selector": "0xf776e552"
       },
       {
@@ -75,7 +72,7 @@
         "label": "get_cid",
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 7 },
         "selector": "0x46a31eb3"
       },
       {
@@ -85,7 +82,7 @@
         "label": "set_owner",
         "mutates": true,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 7 },
         "selector": "0x367facd6"
       },
       {
@@ -99,7 +96,7 @@
         "label": "verify_nft_ownership",
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 12 },
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 10 },
         "selector": "0x501560e7"
       },
       {
@@ -109,7 +106,7 @@
         "label": "encrypt_content",
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 7 },
         "selector": "0xd3c77ae3"
       },
       {
@@ -123,7 +120,7 @@
         "label": "download_and_decrypt",
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 7 },
         "selector": "0xd868db7a"
       }
     ]
@@ -144,8 +141,8 @@
               },
               "name": "cid_map"
             },
-            { "layout": { "leaf": { "key": "0x00000000", "ty": 3 } }, "name": "owner" },
-            { "layout": { "leaf": { "key": "0x00000000", "ty": 5 } }, "name": "owner_restriction" },
+            { "layout": { "leaf": { "key": "0x00000000", "ty": 2 } }, "name": "owner" },
+            { "layout": { "leaf": { "key": "0x00000000", "ty": 3 } }, "name": "owner_restriction" },
             { "layout": { "leaf": { "key": "0x00000000", "ty": 2 } }, "name": "contract_id" },
             { "layout": { "leaf": { "key": "0x00000000", "ty": 2 } }, "name": "rpc_api" },
             { "layout": { "leaf": { "key": "0x00000000", "ty": 2 } }, "name": "ipfs_endpoint" }
@@ -160,79 +157,71 @@
     { "id": 0, "type": { "def": { "sequence": { "type": 1 } } } },
     { "id": 1, "type": { "def": { "primitive": "u8" } } },
     { "id": 2, "type": { "def": { "primitive": "str" } } },
+    { "id": 3, "type": { "def": { "primitive": "bool" } } },
     {
-      "id": 3,
-      "type": {
-        "def": { "composite": { "fields": [{ "type": 4, "typeName": "[u8; 32]" }] } },
-        "path": ["ink_primitives", "types", "AccountId"]
-      }
-    },
-    { "id": 4, "type": { "def": { "array": { "len": 32, "type": 1 } } } },
-    { "id": 5, "type": { "def": { "primitive": "bool" } } },
-    {
-      "id": 6,
+      "id": 4,
       "type": {
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 7 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 8 }], "index": 1, "name": "Err" }
+              { "fields": [{ "type": 5 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 6 }], "index": 1, "name": "Err" }
             ]
           }
         },
         "params": [
-          { "name": "T", "type": 7 },
-          { "name": "E", "type": 8 }
+          { "name": "T", "type": 5 },
+          { "name": "E", "type": 6 }
         ],
         "path": ["Result"]
       }
     },
-    { "id": 7, "type": { "def": { "tuple": [] } } },
+    { "id": 5, "type": { "def": { "tuple": [] } } },
     {
-      "id": 8,
+      "id": 6,
       "type": {
         "def": { "variant": { "variants": [{ "index": 1, "name": "CouldNotReadInput" }] } },
         "path": ["ink_primitives", "LangError"]
       }
     },
     {
-      "id": 9,
+      "id": 7,
       "type": {
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 10 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 8 }], "index": 1, "name": "Err" }
+              { "fields": [{ "type": 8 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 6 }], "index": 1, "name": "Err" }
             ]
           }
         },
         "params": [
-          { "name": "T", "type": 10 },
-          { "name": "E", "type": 8 }
+          { "name": "T", "type": 8 },
+          { "name": "E", "type": 6 }
         ],
         "path": ["Result"]
       }
     },
     {
-      "id": 10,
+      "id": 8,
       "type": {
         "def": {
           "variant": {
             "variants": [
               { "fields": [{ "type": 2 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 11 }], "index": 1, "name": "Err" }
+              { "fields": [{ "type": 9 }], "index": 1, "name": "Err" }
             ]
           }
         },
         "params": [
           { "name": "T", "type": 2 },
-          { "name": "E", "type": 11 }
+          { "name": "E", "type": 9 }
         ],
         "path": ["Result"]
       }
     },
     {
-      "id": 11,
+      "id": 9,
       "type": {
         "def": {
           "variant": {
@@ -255,42 +244,42 @@
       }
     },
     {
-      "id": 12,
+      "id": 10,
       "type": {
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 13 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 8 }], "index": 1, "name": "Err" }
+              { "fields": [{ "type": 11 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 6 }], "index": 1, "name": "Err" }
             ]
           }
         },
         "params": [
-          { "name": "T", "type": 13 },
-          { "name": "E", "type": 8 }
+          { "name": "T", "type": 11 },
+          { "name": "E", "type": 6 }
         ],
         "path": ["Result"]
       }
     },
     {
-      "id": 13,
+      "id": 11,
       "type": {
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 5 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 11 }], "index": 1, "name": "Err" }
+              { "fields": [{ "type": 3 }], "index": 0, "name": "Ok" },
+              { "fields": [{ "type": 9 }], "index": 1, "name": "Err" }
             ]
           }
         },
         "params": [
-          { "name": "T", "type": 5 },
-          { "name": "E", "type": 11 }
+          { "name": "T", "type": 3 },
+          { "name": "E", "type": 9 }
         ],
         "path": ["Result"]
       }
     }
   ],
   "version": "4",
-  "phat": { "contractId": "0xaaedd356f1257e2e7ff4a0d25b5bf21ac1c5aa40121fbff8a9a5e6f7904e5a36" }
+  "phat": { "contractId": "0xb3314e47f3292f5c98a53f031e981b6fd4fa6d1024bd87540f8de0ad4f14a5ed" }
 }
