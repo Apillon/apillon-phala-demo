@@ -13,7 +13,7 @@ const initPhalaContract = async function () {
   // Move to configuration
   const wsProvider = 'wss://poc5.phala.network/ws';
   const pruntimeURL = ' https://poc5.phala.network/tee-api-1';
-  const contractId = '0xf33090f06376a206c9e2ba9150a5d55e0d114df7317f1359a0259a6c773c2b3a';
+  const contractId = '0xee752d4ed4630aa237c0619849db457b8fcaf86bb952faf2ac1c3dd51a0fe2bb';
 
   const provider = new WsProvider(wsProvider);
   const api = await ApiPromise.create({ provider, types });
@@ -46,7 +46,7 @@ export const setCid = async function (
   toast('Submitting transaction to Phala', { type: 'warning' });
 
   console.log('NFT ID: ', nft_id);
-  await contract.tx
+  const response = await contract.tx
     .setCid(options, nft_id, cid)
     .signAndSend(sender, { signer: injector.signer }, async (result: any) => {
       if (result.status.isInBlock) {
@@ -58,6 +58,8 @@ export const setCid = async function (
         console.info('TRANSACTION STATE: ', result.status);
       }
     });
+
+  console.log('setCid: ', response);
 
   return false;
 };
@@ -84,54 +86,10 @@ export const verifyNftOwnership = async function (
   return response.output.toJSON().ok.ok;
 };
 
-export const verifyContractOwnership = async function () {
-  toast('Verifying NFT ownership', { type: 'warning' });
-
-  const [certificate, contract] = await initPhalaContract();
-
-  const response = await contract.query.getCid(certificate, {}, 2);
-  console.log('CID: ', response.output.toJSON().ok.ok);
-
-  return response.output.toJSON().ok.ok;
-};
-
-export const getTestData = async function () {
-  toast('Getting TEST DATA', { type: 'warning' });
-
-  const [certificate, contract] = await initPhalaContract();
-
-  const response = await contract.query.testGetData(certificate, {});
-  console.log('Test data: ', response.output.toJSON().ok.ok);
-
-  return response.output.toJSON().ok.ok;
-};
-
-export const getOwnerCaller = async function () {
-  toast('Test owner', { type: 'warning' });
-
-  const [certificate, contract] = await initPhalaContract();
-
-  const response = await contract.query.testCaller(certificate, {});
-  console.log('Test owner ', response.output.toJSON().ok.ok);
-
-  return response.output.toJSON().ok.ok;
-};
-
-export const contractSetOwner = async function () {
-  toast('Test set owner', { type: 'warning' });
-
-  const [certificate, contract] = await initPhalaContract();
-
-  const response = await contract.query.setOwner(certificate, {});
-  console.log('Response set owner: ', response.output.toJSON().ok.ok);
-
-  return response.output.toJSON().ok.ok;
-};
-
 export const getCid = async function (nft_id: number) {
   const [certificate, contract] = await initPhalaContract();
 
-  const response = await contract.query.testCaller(certificate, {}, 1);
+  const response = await contract.query.getCid(certificate, {}, 2);
   let cid = response.output.toJSON().ok.ok;
 
   return cid;

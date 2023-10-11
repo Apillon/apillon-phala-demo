@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x8c7a75de2e274c1ac52d74f3a0a757add334700e8e5374e22eafcced5d337b9d",
+    "hash": "0xfc2a5a426699c380fb2518d99f42c5ceacc58bfd562b299c096c51978e765b2a",
     "language": "ink! 4.1.0",
     "compiler": "rustc 1.69.0-nightly",
     "build_info": {
@@ -46,6 +46,19 @@
     "lang_error": { "displayName": ["ink", "LangError"], "type": 6 },
     "messages": [
       {
+        "args": [
+          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } },
+          { "label": "cid", "type": { "displayName": ["String"], "type": 2 } }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "set_cid",
+        "mutates": true,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 7 },
+        "selector": "0xe7089a85"
+      },
+      {
         "args": [],
         "default": false,
         "docs": [],
@@ -76,7 +89,7 @@
         "selector": "0x46a31eb3"
       },
       {
-        "args": [],
+        "args": [{ "label": "new_owner", "type": { "displayName": ["String"], "type": 2 } }],
         "default": false,
         "docs": [],
         "label": "set_owner",
@@ -281,5 +294,5 @@
     }
   ],
   "version": "4",
-  "phat": { "contractId": "0xf33090f06376a206c9e2ba9150a5d55e0d114df7317f1359a0259a6c773c2b3a" }
+  "phat": { "contractId": "0xee752d4ed4630aa237c0619849db457b8fcaf86bb952faf2ac1c3dd51a0fe2bb" }
 }

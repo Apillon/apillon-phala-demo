@@ -19,12 +19,6 @@
       </div>
     </div>
 
-    <Btn type="primary" :loading="loadingDownload" @click="testSetPhalaCid()"> Set CID </Btn>
-    <Btn type="primary" :loading="loadingDownload" @click="verifyTx()"> Get CID </Btn>
-    <Btn type="primary" :loading="loadingDownload" @click="testData()">Test data </Btn>
-    <Btn type="primary" :loading="loadingDownload" @click="testOwnerCaller()">Test caller </Btn>
-    <Btn type="primary" :loading="loadingDownload" @click="testSetOwner()">Set owner </Btn>
-
     <div class="overflow-auto" :style="contentMaxStyle">
       <div class="flex justify-center items-center" :style="contentMinStyle">
         <div class="relative pb-24">
@@ -202,13 +196,13 @@ async function verifyOwner() {
   }
 }
 
-async function testSetPhalaCid() {
+async function testSetCid() {
   console.log('Address: ', address);
   await setCid(
     injector,
     address as AddressOrPair,
     2,
-    'Tralalala',
+    'test-string-new',
     (msg: string, finished: boolean) => {
       toast(msg, { type: 'warning' });
       if (finished) {
@@ -216,6 +210,10 @@ async function testSetPhalaCid() {
       }
     }
   );
+}
+
+async function testGetCid() {
+  console.log('CID: ', await getCid(2));
 }
 
 async function setPhalaCid(cid: String) {
@@ -241,22 +239,6 @@ async function setPhalaCid(cid: String) {
       }
     );
   }
-}
-
-async function testSetOwner() {
-  await contractSetOwner();
-}
-
-async function testOwnerCaller() {
-  await getOwnerCaller();
-}
-
-async function verifyTx() {
-  await verifyContractOwnership();
-}
-
-async function testData() {
-  await getTestData();
 }
 
 async function loadAllNFTs() {

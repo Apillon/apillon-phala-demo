@@ -37,7 +37,7 @@ mod phat_crypto {
         private_key: Vec<u8>,
         salt: Vec<u8>,
         cid_map: Mapping<NftId, Cid>,
-        owner: String,
+        owner: AccountId,
         owner_restriction: bool,
         contract_id: String,
         rpc_api: String,
@@ -50,7 +50,7 @@ mod phat_crypto {
             // Default constructor
             let salt = b"981781668367".to_vec();
             let private_key = derive_sr25519_key(&salt);
-            let owner = String::from(format!("{:?}", Self::env().caller()));
+            let owner = Self::env().caller();
             let cid_map = Mapping::default();
 
             Self {
@@ -61,16 +61,19 @@ mod phat_crypto {
         #[ink(message)]
         pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String> {
             let owner = String::from(format!("{:?}", &self.owner));
-            let caller = String::from(format!("{:?}", Self::env().caller()));
-            let mut response = String::from("Done");
+            let caller = Self::env().caller();
+            // let mut response = String::from("Done");
 
-            if owner == caller {
-                self.cid_map.insert(nft_id, &cid);
-            } else {
-                response = String::from("Invalid");
-            }
+            // response = String::from(format!("New cid {:?}", owner));
+            // if owner == caller {
+            //     self.cid_map.insert(nft_id, &cid);
+            // } else {
+            //     response = String::from("Invalid");
+            // }
 
-            Ok(response)
+            self.cid_map.insert(nft_id, &cid);
+
+            Ok(String::from(format!("owner {:?} >> caller {:?}")))
         }
 
         #[ink(message)]
