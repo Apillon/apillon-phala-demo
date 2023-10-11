@@ -58,15 +58,20 @@ mod phat_crypto {
             }
         }
 
-        // #[ink(message)]
-        // pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String> {
-        //     if self.owner_restriction == true && self.owner != Self::env().caller() {
-        //         Ok(format!("INVALID"))
-        //     } else {
-        //         self.cid_map.insert(nft_id, &cid);
-        //         Ok(String::from("Ok"))
-        //     }
-        // }
+        #[ink(message)]
+        pub fn set_cid(&mut self, nft_id: u8, cid: String) -> CustomResult<String> {
+            let owner = String::from(format!("{:?}", &self.owner));
+            let caller = String::from(format!("{:?}", Self::env().caller()));
+            let mut response = String::from("Done");
+
+            if owner == caller {
+                self.cid_map.insert(nft_id, &cid);
+            } else {
+                response = String::from("Invalid");
+            }
+
+            Ok(response)
+        }
 
         #[ink(message)]
         pub fn test_caller(&self) -> CustomResult<String> {
@@ -90,16 +95,18 @@ mod phat_crypto {
         }
 
         #[ink(message)]
-        pub fn set_owner(&mut self) -> CustomResult<String> {
+        pub fn set_owner(&mut self, new_owner: String) -> CustomResult<String> {
             let owner = String::from(format!("{:?}", &self.owner));
             let caller = String::from(format!("{:?}", Self::env().caller()));
+            let mut response = String::from("Done");
 
-            if owner != caller {
-                Ok(format!("INVALID"))
+            if owner == caller {
+                self.owner = new_owner;
             } else {
-                self.owner = caller;
-                Ok(format!("New owner set {:?}", self.owner))
+                response = String::from("Invalid");
             }
+
+            Ok(response)
         }
 
         #[ink(message)]
