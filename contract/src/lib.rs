@@ -97,20 +97,20 @@ mod phat_crypto {
             Ok(format!("{}", cid))
         }
 
-        // #[ink(message)]
-        // pub fn set_owner(&mut self, new_owner: String) -> CustomResult<String> {
-        //     let owner = String::from(format!("{:?}", &self.owner));
-        //     let caller = String::from(format!("{:?}", Self::env().caller()));
-        //     let mut response = String::from("Done");
+        #[ink(message)]
+        pub fn set_owner(&mut self, new_owner: AccountId) -> CustomResult<String> {
+            let owner = String::from(format!("{:?}", &self.owner));
+            let caller = String::from(format!("{:?}", Self::env().caller()));
+            let mut response = String::from("Done");
 
-        //     if owner == caller {
-        //         self.owner = new_owner;
-        //     } else {
-        //         response = String::from("Invalid");
-        //     }
+            if owner == caller {
+                self.owner = new_owner;
+            } else {
+                response = String::from("Invalid");
+            }
 
-        //     Ok(response)
-        // }
+            Ok(response)
+        }
 
         #[ink(message)]
         pub fn verify_nft_ownership(&self, signature: String, message: String, nft_id: u8) -> CustomResult<bool> {
