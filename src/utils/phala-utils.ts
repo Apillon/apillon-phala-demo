@@ -13,7 +13,7 @@ const initPhalaContract = async function () {
   // Move to configuration
   const wsProvider = 'wss://poc5.phala.network/ws';
   const pruntimeURL = ' https://poc5.phala.network/tee-api-1';
-  const contractId = '0xee752d4ed4630aa237c0619849db457b8fcaf86bb952faf2ac1c3dd51a0fe2bb';
+  const contractId = '0x1d12af4dac67456bac7e97032dca6504089cc785d7b37bfd71f1e7438aeeb57e';
 
   const provider = new WsProvider(wsProvider);
   const api = await ApiPromise.create({ provider, types });
