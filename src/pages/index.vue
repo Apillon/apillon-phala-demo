@@ -19,6 +19,9 @@
       </div>
     </div>
 
+    <!-- <Btn type="primary" :loading="loadingDownload" @click="testSetCid()"> set cid </Btn>
+    <Btn type="primary" :loading="loadingDownload" @click="testGetCid()"> get cid </Btn> -->
+
     <div class="overflow-auto" :style="contentMaxStyle">
       <div class="flex justify-center items-center" :style="contentMinStyle">
         <div class="relative pb-24">
@@ -202,7 +205,7 @@ async function testSetCid() {
     injector,
     address as AddressOrPair,
     2,
-    'test-string-new',
+    '123123123123123',
     (msg: string, finished: boolean) => {
       toast(msg, { type: 'warning' });
       if (finished) {

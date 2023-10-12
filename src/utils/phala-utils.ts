@@ -13,7 +13,7 @@ const initPhalaContract = async function () {
   // Move to configuration
   const wsProvider = 'wss://poc5.phala.network/ws';
   const pruntimeURL = ' https://poc5.phala.network/tee-api-1';
-  const contractId = '0x1d12af4dac67456bac7e97032dca6504089cc785d7b37bfd71f1e7438aeeb57e';
+  const contractId = '0x4a603261f21c415522e7e72044329f84530ba8f6ec15290488b9a0588b1f7eaa';
 
   const provider = new WsProvider(wsProvider);
   const api = await ApiPromise.create({ provider, types });
@@ -37,6 +37,8 @@ export const setCid = async function (
 ) {
   const [certificate, contract] = await initPhalaContract();
   const { gasRequired, storageDeposit } = await contract.query.setCid(certificate, {}, nft_id, cid);
+
+  console.error(storageDeposit);
 
   const options = {
     gasLimit: gasRequired.refTime,
