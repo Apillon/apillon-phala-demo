@@ -97,6 +97,16 @@ mod phat_crypto {
             Ok(format!("{}", cid))
         }
 
+
+        #[ink(message)]
+        pub fn get_caller_owner(&self) -> CustomResult<String> {
+            let owner = String::from(format!("{:?}", &self.owner));
+            let caller = String::from(format!("{:?}", Self::env().caller()));
+            let data = String::from(format!("owner {:?}, caller {:?}", &owner, &caller));
+
+            Ok(data)
+        }
+
         #[ink(message)]
         pub fn set_owner(&mut self, new_owner: AccountId) -> CustomResult<String> {
             let owner = String::from(format!("{:?}", &self.owner));
