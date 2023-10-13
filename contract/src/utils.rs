@@ -43,8 +43,8 @@ pub mod utils {
         let default: Address =  Address::zero();
         let phttp = PinkHttp::new(rpc_api);
         let eth = Eth::new(phttp);
-        
         let addr = String::from(contract_id).parse().unwrap();
+
         let contract = Contract::from_json(eth, addr, include_bytes!("../abis/moonbase_nft_abi.json")).unwrap();
 
         let query = "ownerOf";

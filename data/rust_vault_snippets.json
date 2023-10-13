@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0xf071f833db041dbcaedaae128aa001134daeac61c3b40aadb99a8651585aeb9a",
+    "hash": "0xb081f69e3a0787ea2620b33148011d58810a1c25b2334d46e5df41d792b8231a",
     "language": "ink! 4.1.0",
     "compiler": "rustc 1.69.0-nightly",
     "build_info": {
@@ -87,6 +87,26 @@
         "payable": false,
         "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
         "selector": "0x46a31eb3"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "get_caller_owner",
+        "mutates": false,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
+        "selector": "0x63be7590"
+      },
+      {
+        "args": [{ "label": "new_owner", "type": { "displayName": ["AccountId"], "type": 3 } }],
+        "default": false,
+        "docs": [],
+        "label": "set_owner",
+        "mutates": true,
+        "payable": false,
+        "returnType": { "displayName": ["ink", "MessageResult"], "type": 9 },
+        "selector": "0x367facd6"
       },
       {
         "args": [
@@ -292,5 +312,5 @@
     }
   ],
   "version": "4",
-  "phat": { "contractId": "0x4a603261f21c415522e7e72044329f84530ba8f6ec15290488b9a0588b1f7eaa" }
+  "phat": { "contractId": "0xa3efa436d86e929170beaaa426aeb580254a3039e3b514ce975a7f44f3a3a5de" }
 }

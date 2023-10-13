@@ -153,10 +153,10 @@ mod phat_crypto {
             let is_owner = verify_nft_ownership(
                 signature, message, nft_id, contract_id, rpc_api);
 
+
             if is_owner == true {
                 let cid = self.cid_map.get(nft_id).unwrap();
-                let response = http_get!(
-                    format!("{}/{}", ipfs_endpoint, cid));
+                let response = http_get!(format!("{}/{}", ipfs_endpoint, cid));
 
                 let resp_body_str = match String::from_utf8(response.body) {
                     Ok(value) => value,
