@@ -13,5 +13,8 @@ pub enum ApillonError {
     FailedToGetBlockNumber,
     RequestFailed,
     Test,
-    NoPermission
+    NoPermission,
+    CidMissingFordNftId,
+    BadTimestamp,
+    NotNftOwner
 }
