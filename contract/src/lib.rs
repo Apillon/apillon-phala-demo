@@ -30,7 +30,7 @@ mod phat_crypto {
     };
     use cipher::{consts::{U12, U32}, generic_array::GenericArray};
 
-    const SIGNATURE_VALID_TIME_IN_SECONDS: u64 = 5 * 60;
+    const SIGNATURE_VALID_TIME_IN_MS: u64 = 5 * 60 * 1000;
 
     pub type CustomResult<T> = Result<T, ApillonError>;
 
@@ -81,7 +81,7 @@ mod phat_crypto {
         }
 
         #[ink(message)]
-        pub fn set_cid_with_nft(&mut self, nft_id: u8, cid: String, signature: String, unix_timestamp: u64) -> CustomResult<String> {
+        pub fn set_cid_with_nft(&mut self, nft_id: u8, cid: String, unix_timestamp: u64, signature: String) -> CustomResult<String> {
             let hashed_message = match Self::check_timestamp_and_generate_message(unix_timestamp) {
                 Ok(value) => value,
                 Err(value) => return Err(value),
@@ -129,7 +129,7 @@ mod phat_crypto {
         }
 
         #[ink(message)]
-        pub fn download_and_decrypt(&self, signature: String, unix_timestamp: u64, nft_id: u8) -> CustomResult<String> {
+        pub fn download_and_decrypt(&self, nft_id: u8, unix_timestamp: u64, signature: String, ) -> CustomResult<String> {
             let hashed_message = match Self::check_timestamp_and_generate_message(unix_timestamp) {
                 Ok(value) => value,
                 Err(value) => return Err(value),
@@ -174,7 +174,7 @@ mod phat_crypto {
          */
         fn check_timestamp_and_generate_message(unix_timestamp: u64) -> Result<[u8; 32], ApillonError> {
             let block_timestamp = Self::env().block_timestamp();
-            if unix_timestamp < block_timestamp || block_timestamp.abs_diff(unix_timestamp) >= SIGNATURE_VALID_TIME_IN_SECONDS {
+            if unix_timestamp > block_timestamp || block_timestamp.abs_diff(unix_timestamp) >= SIGNATURE_VALID_TIME_IN_MS {
                 return Err(ApillonError::BadTimestamp);
             }
             let timestamped_message = format!("APILLON_REQUEST_MSG: {}", unix_timestamp);
@@ -194,8 +194,8 @@ mod phat_crypto {
         const TEST_CID: &str = "QmZJTqJzHFt2kSDVWGWUXcgomDSBby1sTtiJcs3LXjXNnC";
         const TEST_DECRYPTED_CONTENT: &str = "test_string";
         const TEST_ENCRYPTED_CONTENT: &str = "53bfb3715cb5c28a6949d36d0e551a2434d10ad5415aaf783786d0";
-        const TEST_MESSAGE_SIGNATURE: &str = "16519d5b537efb071f64d2728a1917e760a8eb97807795a8e4d144ebd6e460b810218071514795ee30b4a598beeb93cc80db5e6ac47ef695c8a8983a26f173991c";
-        const TEST_SIGNATURE_TIMESTAMP: u64 = 1701392162;
+        const TEST_MESSAGE_SIGNATURE: &str = "30d121c70f1f79d8b3212e3cdd24de3bf1a16fc5c3d14880fb80e5299897b4466ec10ac81893d0713ff2bf14feab30f3b8226a6e0b5eb2bec739d512815d4b2a1c";
+        const TEST_SIGNATURE_TIMESTAMP: u64 = 1701688728000;
 
         // TEST HELPERS
         fn test_accounts() -> ink::env::test::DefaultAccounts<PinkEnvironment> {
@@ -278,8 +278,8 @@ mod phat_crypto {
             let result = contract.set_cid_with_nft(
                 2,
                 TEST_CID.to_string(),
-                TEST_MESSAGE_SIGNATURE.to_string(),
                 TEST_SIGNATURE_TIMESTAMP,
+                TEST_MESSAGE_SIGNATURE.to_string(),
             );
 
             assert_eq!(result, Err(ApillonError::NotNftOwner));
@@ -295,8 +295,8 @@ mod phat_crypto {
             let result = contract.set_cid_with_nft(
                 TEST_NFT_ID,
                 TEST_CID.to_string(),
-                TEST_MESSAGE_SIGNATURE.to_string(),
                 TEST_SIGNATURE_TIMESTAMP,
+                TEST_MESSAGE_SIGNATURE.to_string(),
             );
 
             assert_eq!(result.unwrap(), "Done");
@@ -340,9 +340,9 @@ mod phat_crypto {
             set_block_timestamp(TEST_SIGNATURE_TIMESTAMP);
 
             let result = contract.download_and_decrypt(
-                TEST_MESSAGE_SIGNATURE.to_string(),
-                TEST_SIGNATURE_TIMESTAMP,
                 TEST_NFT_ID,
+                TEST_SIGNATURE_TIMESTAMP,
+                TEST_MESSAGE_SIGNATURE.to_string(),
             );
 
             assert_eq!(result.unwrap(), TEST_DECRYPTED_CONTENT);
@@ -355,27 +355,27 @@ mod phat_crypto {
             set_caller(test_accounts().bob);
             set_block_timestamp(TEST_SIGNATURE_TIMESTAMP);
 
-            let expired_timestamp = TEST_SIGNATURE_TIMESTAMP + SIGNATURE_VALID_TIME_IN_SECONDS;
+            let expired_timestamp = TEST_SIGNATURE_TIMESTAMP + SIGNATURE_VALID_TIME_IN_MS;
             let result = contract.download_and_decrypt(
-                TEST_MESSAGE_SIGNATURE.to_string(),
-                expired_timestamp,
                 TEST_NFT_ID,
+                expired_timestamp,
+                TEST_MESSAGE_SIGNATURE.to_string(),
             );
 
             assert_eq!(result, Err(ApillonError::BadTimestamp));
         }
 
         #[ink::test]
-        fn user_cant_decrypt_content_with_signature_timestamp_created_before_block_timestamp() {
+        fn user_cant_decrypt_content_with_signature_timestamp_created_after_block_timestamp() {
             let mut contract = get_contract(true);
             _ = contract.set_cid(TEST_NFT_ID, TEST_CID.to_string());
             set_caller(test_accounts().bob);
             set_block_timestamp(TEST_SIGNATURE_TIMESTAMP);
 
             let result = contract.download_and_decrypt(
-                TEST_MESSAGE_SIGNATURE.to_string(),
-                TEST_SIGNATURE_TIMESTAMP - 1,
                 TEST_NFT_ID,
+                TEST_SIGNATURE_TIMESTAMP + 1,
+                TEST_MESSAGE_SIGNATURE.to_string(),
             );
 
             assert_eq!(result, Err(ApillonError::BadTimestamp));
@@ -391,9 +391,9 @@ mod phat_crypto {
             let fake_signature = "851caebcdb8af36a06fb9a2f011bd82f8285739198aa3c0f893c6bbc7a158fd7127e387e8c3737404618ae0515d22feaf3928c1d896163f4c441ce33d6e095f71b";
 
             let result = contract.download_and_decrypt(
-                fake_signature.to_string(),
-                TEST_SIGNATURE_TIMESTAMP,
                 TEST_NFT_ID,
+                TEST_SIGNATURE_TIMESTAMP,
+                fake_signature.to_string(),
             );
 
             assert_eq!(result, Err(ApillonError::NotNftOwner));
@@ -407,9 +407,9 @@ mod phat_crypto {
             set_block_timestamp(TEST_SIGNATURE_TIMESTAMP);
 
             let result = contract.download_and_decrypt(
-                TEST_MESSAGE_SIGNATURE.to_string(),
-                TEST_SIGNATURE_TIMESTAMP,
                 TEST_NFT_ID,
+                TEST_SIGNATURE_TIMESTAMP,
+                TEST_MESSAGE_SIGNATURE.to_string(),
             );
 
             assert_eq!(result, Err(ApillonError::CidMissingFordNftId));
