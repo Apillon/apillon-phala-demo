@@ -1,11 +1,7 @@
 <template>
   <div>
     <div ref="headerRef">
-      <Header
-        :wallet-connected="!!address || contract"
-        :wallet-loading="walletLoading"
-        @wallet-connect="connectWallet()"
-      />
+      <Header />
     </div>
     <div class="absolute top-40 left-1/2 w-full max-w-7xl -translate-x-1/2">
       <div v-if="nfts && nfts.length" class="absolute left-8 top-0 w-40">
@@ -19,12 +15,17 @@
         <div class="relative pb-24">
           <div class="container min-w-[80vw] lg:min-w-[40rem]">
             <h1 class="text-center my-10">Schrödinger’s NFT</h1>
-            <DropFile ref="dropFileRef" :state="encryptionState" @verify="verifyOwner" />
+            <DropFile :state="encryptionState" @verify="verifyOwner" />
           </div>
           <div v-if="encryptionState === EncryptionState.DECRYPTED" class="flex gap-8 mt-8">
-            <div class="w-1/2" id="connect-btn"></div>
-            <div class="w-1/2" id="connect-btn">
-              <Btn type="primary" :loading="loadingDownload" @click="phalaDownloadAndDecrypt()">
+            <div class="md:w-1/4"></div>
+            <div class="w-1/2">
+              <Btn
+                type="primary"
+                size="large"
+                :loading="loadingDownload"
+                @click="phalaDownloadAndDecrypt()"
+              >
                 Download
               </Btn>
             </div>
@@ -44,34 +45,26 @@
         </div>
       </div>
     </div>
-    <div class="footer absolute left-0 right-0 bottom-0 py-4 lg:py-8 flex justify-center bg-bg">
-      <div class="flex gap-2 items-center">
-        Powered by
-        <img src="/images/phala.png" class="object-contain" alt="phala" width="82" height="16" />
-        <img
-          src="/images/moonbeam.svg"
-          class="object-contain"
-          alt="moonbeam"
-          width="83"
-          height="16"
-        />
-        <SvgInclude :name="SvgNames.Crust" />
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ethers } from 'ethers';
+import { useAccount } from 'use-wagmi';
 
 import * as fs from 'file-saver';
-import { SvgNames } from '@/components/general/SvgInclude.vue';
 import { EncryptionState } from '@/lib/types/general.types';
 
-const walletLoading = ref<boolean>(false);
+const { address } = useAccount({
+  onConnect: onWalletConnected,
+  onDisconnect: onWalletDisconnected,
+});
+
+const { contract, initContract, getBalance, getTokenOfOwner, getTokenUri, prepareSignData } =
+  useContract();
+
+const loadingNFT = ref<boolean>(false);
 const loadingNfts = ref<boolean>(false);
 const loadingDownload = ref<boolean>(false);
-const dropFileRef = ref<HTMLElement>();
 const encryptionState = ref<number>(EncryptionState.IDLE);
 
 const ipfsCid = ref<String>('');
@@ -82,9 +75,6 @@ const nftsLoaded = ref<boolean>(false);
 
 const nfts = ref<Nft[]>([]);
 
-let provider: any = null;
-let contract: any = null;
-let address: any = null;
 let signer: any = null;
 
 /** Heading height */
@@ -100,28 +90,26 @@ const contentMaxStyle = computed(() => {
   };
 });
 
-onMounted(async () => {
-  console.log('Phala demo init ...');
+async function onWalletConnected() {
+  sleep(100);
 
-  [signer, provider] = await connectMetamaskWallet();
-});
-
-async function connectWallet() {
-  walletLoading.value = true;
-  [signer, provider] = await connectMetamaskWallet();
-
-  contract = new ethers.Contract(NFT_ADDRESS, contractAbi, provider);
-
-  await loadNfts(signer.getAddress());
+  loadingNFT.value = true;
   encryptionState.value = EncryptionState.WALLET_CONNECTED;
 
-  walletLoading.value = false;
+  await initContract();
+  await loadNfts();
+
+  loadingNFT.value = false;
+}
+
+async function onWalletDisconnected() {
+  encryptionState.value = EncryptionState.IDLE;
 }
 
 async function verifyOwner() {
   encryptionState.value = EncryptionState.VERIFYING_OWNER;
 
-  const [timestamp, signature] = await prepareSignData(signer);
+  const [timestamp, signature] = await prepareSignData();
 
   let isAuthenticated = false;
 
@@ -147,23 +135,28 @@ async function verifyOwner() {
   }
 }
 
-async function loadNfts(walletAddress?: string) {
+async function loadNfts() {
   loadingNfts.value = true;
   nfts.value = [];
 
+  const balance = contract.value ? await getBalance() : null;
+  console.log(balance);
+
+  if (!contract.value || !balance || balance.toString() === '0') {
+    loadingNfts.value = false;
+    return;
+  }
+
   try {
-    const balance = await contract.balanceOf(walletAddress);
+    for (let i = 0; i < balance; i++) {
+      const id = await getTokenOfOwner(i);
+      const url = await getTokenUri(id);
+      console.log(i, id, url);
 
-    for (let i = 0; i < balance.toNumber(); i++) {
-      let nftId = walletAddress
-        ? await contract.tokenOfOwnerByIndex(walletAddress, i)
-        : await contract.tokenByIndex(walletAddress);
-
-      const url = await contract.tokenURI(nftId.toNumber());
       const metadata = await fetch(url).then(response => {
         return response.json();
       });
-      nfts.value.push({ id: nftId.toNumber(), ...metadata });
+      nfts.value.push({ id: id, ...metadata });
       nftsLoaded.value = true;
     }
   } catch (e) {

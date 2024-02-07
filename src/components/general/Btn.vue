@@ -27,7 +27,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    validator: (value: string) => ['tiny', 'small', 'medium'].includes(value),
+    validator: (value: string) => ['tiny', 'small', 'medium', 'large'].includes(value),
     default: 'medium',
   },
   onClick: { type: Function, default: null },
@@ -60,6 +60,10 @@ const btnClass = computed(() => {
       'bg-blue text-bg': props.type === 'blue',
       '!h-auto !p-0 !w-auto text-yellow font-sans font-normal underline locked':
         props.type === 'link',
+      'h-8 py-1 px-2': props.size === 'tiny',
+      'h-10 py-1 px-4': props.size === 'small',
+      'h-12 py-2 px-6': props.size === 'medium',
+      'h-12 py-2 px-6 w-full': props.size === 'large',
     },
   ];
 });
@@ -76,7 +80,7 @@ function onClick(ev: MouseEvent) {
 
 <style lang="postcss" module>
 .btn {
-  @apply w-full inline-flex justify-center items-center h-12 py-2 px-6  font-bold cursor-pointer;
+  @apply inline-flex justify-center items-center   font-bold cursor-pointer;
 }
 
 .depressed {

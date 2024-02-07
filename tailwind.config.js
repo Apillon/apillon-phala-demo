@@ -1,7 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
-  content: ['./index.html', './src/components/**/*.{vue,js,ts}', './src/pages/**/*.{vue,js,ts}'],
+  content: [
+    './index.html',
+    './src/components/**/*.{vue,js,ts}',
+    './src/composables/**/*.{js,ts}',
+    './src/pages/**/*.{vue,js,ts}',
+  ],
   theme: {
     screens: {
       sm: '640px',

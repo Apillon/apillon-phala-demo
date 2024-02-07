@@ -16,9 +16,6 @@
           'pointer-events-none border border-dashed border-pink': state === EncryptionState.ERROR,
         },
       ]"
-      @dragover="dragover"
-      @dragleave="dragleave"
-      @drop="drop"
       @click="emit('verify')"
     >
       <input
@@ -81,41 +78,7 @@ const props = defineProps({
   state: { type: Number, default: EncryptionState.IDLE },
 });
 
-const emit = defineEmits(['uploaded', 'download', 'verify']);
-const isDragging = ref<boolean>(false);
-const file = ref<File | null>();
-const fileRef = ref<HTMLInputElement>();
-const $style = useCssModule();
-
-function triggerFileUpload() {
-  if (fileRef.value) {
-    fileRef.value.click();
-  }
-}
-
-function onChange() {
-  const files = fileRef.value?.files;
-
-  if (files && files.length > 0 && files[0]) {
-    file.value = files[0];
-    emit('uploaded', files[0]);
-  }
-}
-function dragover(e: DragEvent) {
-  e.preventDefault();
-  isDragging.value = true;
-}
-function dragleave() {
-  isDragging.value = false;
-}
-function drop(e: DragEvent) {
-  e.preventDefault();
-  if (fileRef.value) {
-    fileRef.value.files = e.dataTransfer?.files || null;
-    onChange();
-  }
-  isDragging.value = false;
-}
+const emit = defineEmits(['verify']);
 </script>
 
 <style lang="postcss" module>
