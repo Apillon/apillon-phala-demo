@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }) => {
           '@vueuse/core',
           { 'vue3-toastify': ['toast'] },
         ],
-        dirs: ['./src/config', './src/lib', './src/utils'],
+        dirs: ['./src/lib/**'],
         dts: 'src/auto-imports.d.ts',
       }),
 

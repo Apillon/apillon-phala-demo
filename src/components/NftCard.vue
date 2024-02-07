@@ -1,14 +1,15 @@
 <template>
-  <div :id="'nft_' + id" class="nft">
-    <img :src="src" class="nft_img" :alt="name" />
+  <div v-if="nft" class="relative nft">
+    <div class="absolute bottom-0 left-0 right-0 px-2 py-1 bg-black/30 text-xs">
+      <span>ID: {{ nft.id }}</span> <br />
+      <span>{{ nft.name }}</span>
+    </div>
+    <img :src="nft.image" class="nft_img" :alt="nft.name" />
   </div>
 </template>
 
 <script lang="ts" setup>
 defineProps({
-  id: { type: Number, default: 0 },
-  src: { type: String, default: null },
-  name: { type: String, default: null },
-  description: { type: String, default: null },
+  nft: { type: Object as PropType<Nft>, default: null },
 });
 </script>

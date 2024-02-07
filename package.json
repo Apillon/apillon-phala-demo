@@ -26,7 +26,7 @@
     "protobufjs": "^6.11.3",
     "undici": "^5.22.1",
     "@metamask/providers": "^11.0.0",
-    "@phala/sdk": "^0.4.0",
+    "@phala/sdk": "^0.5.8",
     "@polkadot/api": "^10.7.1",
     "@polkadot/api-contract": "^10.7.1",
     "@polkadot/extension-dapp": "^0.46.3",

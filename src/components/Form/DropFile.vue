@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-import { EncryptionState } from '@/config/types';
+import { EncryptionState } from '@/lib/types/general.types';
 
 const props = defineProps({
   state: { type: Number, default: EncryptionState.IDLE },

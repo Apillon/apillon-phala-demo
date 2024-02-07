@@ -2,9 +2,10 @@
   /* Cabinet Grotesk */
   @font-face {
     font-family: 'Cabinet Grotesk';
-    src: url('./fonts/cabinet-grotesk/TZVUWRP4UW5PEJWBLXHG5VVGPODI2WLC.woff2') format('woff2'),
-      url('./fonts/cabinet-grotesk/TZVUWRP4UW5PEJWBLXHG5VVGPODI2WLC.woff') format('woff'),
-      url('./fonts/cabinet-grotesk/TZVUWRP4UW5PEJWBLXHG5VVGPODI2WLC.ttf') format('truetype');
+    src: url('./assets/fonts/cabinet-grotesk/TZVUWRP4UW5PEJWBLXHG5VVGPODI2WLC.woff2')
+        format('woff2'),
+      url('./assets/fonts/cabinet-grotesk/TZVUWRP4UW5PEJWBLXHG5VVGPODI2WLC.woff') format('woff'),
+      url('./assets/fonts/cabinet-grotesk/TZVUWRP4UW5PEJWBLXHG5VVGPODI2WLC.ttf') format('truetype');
     font-weight: 900;
     font-display: swap;
     font-style: normal;
