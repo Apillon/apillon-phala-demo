@@ -7,13 +7,6 @@ export enum EncryptionState {
 }
 
 declare global {
-  /**
-   * Window
-   */
-  interface Window {
-    ethereum: any;
-  }
-
   interface Nft {
     id: number;
     name: string;

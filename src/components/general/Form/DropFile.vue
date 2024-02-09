@@ -3,7 +3,6 @@
     <div
       :class="[
         $style.dropzoneContainer,
-        { '!bg-bg-light': isDragging || file },
         {
           'pointer-events-none':
             state === EncryptionState.IDLE || state === EncryptionState.VERIFYING_OWNER,
@@ -25,7 +24,6 @@
         id="fileInput"
         accept=".json"
         :class="$style.hiddenInput"
-        @change="onChange"
       />
 
       <label for="fileInput" class="pb-10 pointer-events-none" :class="$style.fileLabel">
@@ -64,15 +62,14 @@
           Your curiosity didn't unlock the files. <br />
           (But it didn't kill the cat, either.)
         </p>
-        <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>
-        <p v-else class="mb-0">Drag & drop to update encrypted file</p>
+        <p v-else class="mb-0">Click to decrypt file</p>
       </label>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { EncryptionState } from '@/lib/types/general.types';
+import { EncryptionState } from '~/lib/types/general.types';
 
 const props = defineProps({
   state: { type: Number, default: EncryptionState.IDLE },

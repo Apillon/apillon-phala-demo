@@ -1,6 +1,6 @@
-import { NFT_CHAIN_ID } from '@/lib/config/general.config';
-import { sleep } from '@/lib/utils/helpers';
-import { chains } from '@/lib/values/general.values';
+import { NFT_CHAIN_ID } from '~/lib/config/general.config';
+import { sleep } from '~/lib/utils/helpers';
+import { chains } from '~/lib/values/general.values';
 import {
   useAccount,
   useNetwork,

@@ -22,6 +22,7 @@ declare module 'vue' {
     Loader: typeof import('./components/general/Animation/Loader.vue')['default']
     Modal: typeof import('./components/general/Modal.vue')['default']
     NftCard: typeof import('./components/parts/NftCard.vue')['default']
+    Nfts: typeof import('./components/parts/Nfts.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Spinner: typeof import('./components/general/Animation/Spinner.vue')['default']

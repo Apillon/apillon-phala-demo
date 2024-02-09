@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
+import { saveAs } from 'file-saver';
 import { OnChainRegistry, signCertificate, PinkContractPromise, types } from '@phala/sdk';
-// import { waitReady } from '@polkadot/wasm-crypto';
 import { Keyring, WsProvider, ApiPromise } from '@polkadot/api';
 import rust_vault_snippets from '~/../data/rust_vault_snippets.json';
 
@@ -11,9 +11,9 @@ let phalaCertificate: any = null;
 // Creates a Contract instance and connects to the phala network (PoC5 atm)
 const initPhalaContract = async function () {
   if (!account || !phalaCertificate || !phalaContract) {
-    // await waitReady();
-
     const provider = new WsProvider(PHALA_RPC);
+
+    // @ts-ignore
     const api = await ApiPromise.create({ provider, types });
     const phatRegistry = await OnChainRegistry.create(api);
 
@@ -31,7 +31,6 @@ const initPhalaContract = async function () {
       contractKey
     );
   }
-  console.log(account, phalaCertificate, phalaContract);
 
   return [account, phalaCertificate, phalaContract];
 };
@@ -53,15 +52,9 @@ export async function decryptContent(nftId: number, timestamp: number, signature
     console.log(error);
     return null;
   }
-  const result = response.result.toJSON();
-  console.log('result', result);
-
-  if ('err' in result) {
-    throw new Error(`Failed to execute contract: ${result}`);
-  }
 
   const output = response.output.toJSON();
-  console.log('output', output);
+
   if ('err' in output) {
     throw new Error(`Failed to decrypt content: ${output.err}`);
   } else if (!output.ok) {
@@ -69,10 +62,39 @@ export async function decryptContent(nftId: number, timestamp: number, signature
   } else if ('err' in output.ok) {
     throw new Error(`Failed to decrypt content: ${output.ok.err}`);
   }
-  // console.log('result', outputOk)
-  let contentParts = output.ok.ok.split(',');
-  let content = Buffer.from(contentParts[1], 'base64').toString();
-  console.log(`content: "${content}"`);
-  console.log('content type:', contentParts[0]);
-  return content;
+  return output.ok.ok;
+}
+
+export function saveFile(content: string) {
+  let [type, contentData] = content.split(',');
+  let data = Buffer.from(contentData, 'base64').toString();
+
+  const fileExt = detectType(type);
+
+  var blob = new Blob([data]);
+  saveAs(blob, `decrypted_file.${fileExt}`);
+}
+
+function detectType(type: any) {
+  const extensions = {
+    xls: 'application/vnd.ms-excel',
+    ppt: 'application/vnd.ms-powerpoint',
+    doc: 'application/msword',
+    xml: 'text/xml',
+    mpeg: 'audio/mpeg',
+    mpg: 'audio/mpeg',
+    svg: 'image/svg+xml',
+    png: 'image/png',
+    jpg: 'image/jpeg',
+    csv: 'text/csv',
+    txt: 'text/plain',
+  };
+  let fileType = 'txt';
+  Object.entries(extensions).forEach(([ext, name]) => {
+    if (type.includes(name)) {
+      fileType = ext;
+      return;
+    }
+  });
+  return fileType;
 }

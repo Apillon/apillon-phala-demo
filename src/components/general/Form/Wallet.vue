@@ -5,11 +5,6 @@ import MetaMaskSVG from '~/assets/icons/metaMask.svg';
 import CoinbaseWalletSVG from '~/assets/icons/coinbaseWallet.svg';
 
 const { connect, connectors, pendingConnector } = useConnect();
-
-const walletIcons = {
-  metaMask: MetaMaskSVG,
-  coinbaseWallet: CoinbaseWalletSVG,
-};
 </script>
 
 <template>
@@ -34,7 +29,13 @@ const walletIcons = {
         @click="connect({ connector })"
       >
         <span class="inline-flex gap-2 items-center">
-          <img :src="walletIcons[connector.id]" class="text-xl" filled />
+          <img v-if="connector.id === 'metaMask'" :src="MetaMaskSVG" class="text-xl" filled />
+          <img
+            v-else-if="connector.id === 'coinbaseWallet'"
+            :src="CoinbaseWalletSVG"
+            class="text-xl"
+            filled
+          />
           <span>{{ connector.name }}</span>
         </span>
       </Btn>

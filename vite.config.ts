@@ -2,7 +2,6 @@ import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import Pages from 'vite-plugin-pages';
-import legacy from '@vitejs/plugin-legacy';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ViteWebfontDownload } from 'vite-plugin-webfont-dl';
@@ -33,10 +32,6 @@ export default defineConfig(({ command, mode }) => {
         dts: 'src/components.d.ts',
       }),
 
-      legacy({
-        targets: ['defaults', 'not IE 11'],
-      }),
-
       ViteWebfontDownload([
         'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&family=IBM+Plex+Sans:wght@400;700&display=swap',
       ]),
@@ -44,7 +39,6 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         '~': `${path.resolve(__dirname, 'src')}/`,
-        '@': `${path.resolve(__dirname, 'src')}/`,
       },
     },
   };

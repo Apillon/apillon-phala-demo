@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { shortHash } from '@/lib/utils/strings';
+import { shortHash } from '~/lib/utils/strings';
 import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
 
 const { connect, connectors, isLoading } = useConnect();
