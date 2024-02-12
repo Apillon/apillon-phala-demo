@@ -9,6 +9,7 @@
     }
   ],
   "compilerOptions": {
-    "lib": ["ES2015", "es5", "es6", "dom", "dom.iterable"]
+    "lib": ["ES2015", "es5", "es6", "dom", "dom.iterable"],
+    "skipLibCheck": true
   }
 }

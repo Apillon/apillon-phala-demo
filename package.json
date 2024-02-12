@@ -47,7 +47,6 @@
     "typescript": "~5.0.4",
     "vite": "^4.3.5",
     "vite-plugin-pages": "^0.31.0",
-    "vite-plugin-vue-layouts": "^0.8.0",
     "vite-plugin-webfont-dl": "^3.7.6",
     "vue-tsc": "^1.6.4"
   }
