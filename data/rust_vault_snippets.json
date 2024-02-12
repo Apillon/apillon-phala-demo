@@ -1,161 +1,147 @@
 {
-  "source": {
-    "hash": "0x7156e0912ba0d0bad3f69057c36989c505ef9e31e9b5027d2d02c422948b181e",
-    "language": "ink! 4.1.0",
-    "compiler": "rustc 1.68.2",
-    "build_info": {
-      "build_mode": "Debug",
-      "cargo_contract_version": "3.0.1",
-      "rust_toolchain": "stable-aarch64-apple-darwin",
-      "wasm_opt_settings": { "keep_debug_symbols": false, "optimization_passes": "Z" }
-    }
-  },
-  "contract": {
-    "name": "rust_vault_snippets",
-    "version": "0.1.0",
-    "authors": ["[your_name] <[your_email]>"]
-  },
   "spec": {
-    "constructors": [
-      {
-        "args": [],
-        "default": false,
-        "docs": [],
-        "label": "new",
-        "payable": false,
-        "returnType": { "displayName": ["ink_primitives", "ConstructorResult"], "type": 5 },
-        "selector": "0x9bae9d5e"
-      }
-    ],
     "docs": [],
-    "environment": {
-      "accountId": { "displayName": [], "type": 6 },
-      "balance": { "displayName": [], "type": 6 },
-      "blockNumber": { "displayName": [], "type": 6 },
-      "chainExtension": { "displayName": [], "type": 6 },
-      "hash": { "displayName": [], "type": 6 },
-      "maxEventTopics": 0,
-      "timestamp": { "displayName": [], "type": 6 }
-    },
     "events": [],
-    "lang_error": { "displayName": ["ink", "LangError"], "type": 7 },
     "messages": [
       {
-        "args": [{ "label": "file_content", "type": { "displayName": ["String"], "type": 2 } }],
-        "default": false,
+        "args": [],
         "docs": [],
-        "label": "encrypt_content",
+        "label": "get_contract_id",
+        "default": false,
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
-        "selector": "0xd3c77ae3"
-      },
-      {
-        "args": [
-          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } },
-          { "label": "cid", "type": { "displayName": ["String"], "type": 2 } }
-        ],
-        "default": false,
-        "docs": [],
-        "label": "set_cid",
-        "mutates": true,
-        "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 5 },
-        "selector": "0xe7089a85"
-      },
-      {
-        "args": [{ "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } }],
-        "default": false,
-        "docs": [],
-        "label": "get_cid",
-        "mutates": false,
-        "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
-        "selector": "0x46a31eb3"
+        "selector": "0x33e5a624",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
       },
       {
         "args": [],
-        "default": false,
         "docs": [],
-        "label": "get_caller",
+        "label": "get_rpc_api",
+        "default": false,
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
-        "selector": "0x8dd15f8f"
+        "selector": "0x18f63eff",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
       },
       {
         "args": [],
+        "docs": [],
+        "label": "get_ipfs_endpoint",
         "default": false,
+        "mutates": false,
+        "payable": false,
+        "selector": "0x187b9c1c",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
+      },
+      {
+        "args": [],
         "docs": [],
         "label": "get_owner",
-        "mutates": false,
-        "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
-        "selector": "0x07fcd0b1"
-      },
-      {
-        "args": [],
         "default": false,
-        "docs": [],
-        "label": "test_ownership",
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
-        "selector": "0x18899ef5"
+        "selector": "0x07fcd0b1",
+        "returnType": { "type": 12, "displayName": ["ink", "MessageResult"] }
       },
       {
         "args": [
-          { "label": "signature", "type": { "displayName": ["String"], "type": 2 } },
-          { "label": "message", "type": { "displayName": ["String"], "type": 2 } },
-          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } }
+          { "type": { "type": 1, "displayName": ["u8"] }, "label": "nft_id" },
+          { "type": { "type": 2, "displayName": ["String"] }, "label": "cid" }
         ],
-        "default": false,
         "docs": [],
-        "label": "verify_nft_ownership",
-        "mutates": false,
+        "label": "set_cid",
+        "default": false,
+        "mutates": true,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 11 },
-        "selector": "0x501560e7"
+        "selector": "0xe7089a85",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
       },
       {
         "args": [
-          { "label": "signature", "type": { "displayName": ["String"], "type": 2 } },
-          { "label": "message", "type": { "displayName": ["String"], "type": 2 } },
-          { "label": "nft_id", "type": { "displayName": ["u8"], "type": 1 } }
+          { "type": { "type": 1, "displayName": ["u8"] }, "label": "nft_id" },
+          { "type": { "type": 2, "displayName": ["String"] }, "label": "cid" },
+          { "type": { "type": 14, "displayName": ["u64"] }, "label": "unix_timestamp" },
+          { "type": { "type": 2, "displayName": ["String"] }, "label": "signature" }
         ],
+        "docs": [],
+        "label": "set_cid_with_nft",
         "default": false,
+        "mutates": true,
+        "payable": false,
+        "selector": "0x590110b6",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
+      },
+      {
+        "args": [{ "type": { "type": 1, "displayName": ["u8"] }, "label": "nft_id" }],
+        "docs": [],
+        "label": "get_cid",
+        "default": false,
+        "mutates": false,
+        "payable": false,
+        "selector": "0x46a31eb3",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
+      },
+      {
+        "args": [{ "type": { "type": 3, "displayName": ["AccountId"] }, "label": "new_owner" }],
+        "docs": [],
+        "label": "set_owner",
+        "default": false,
+        "mutates": true,
+        "payable": false,
+        "selector": "0x367facd6",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
+      },
+      {
+        "args": [{ "type": { "type": 2, "displayName": ["String"] }, "label": "content" }],
+        "docs": [],
+        "label": "encrypt_content",
+        "default": false,
+        "mutates": false,
+        "payable": false,
+        "selector": "0xd3c77ae3",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
+      },
+      {
+        "args": [
+          { "type": { "type": 1, "displayName": ["u8"] }, "label": "nft_id" },
+          { "type": { "type": 14, "displayName": ["u64"] }, "label": "unix_timestamp" },
+          { "type": { "type": 2, "displayName": ["String"] }, "label": "signature" }
+        ],
         "docs": [],
         "label": "download_and_decrypt",
+        "default": false,
         "mutates": false,
         "payable": false,
-        "returnType": { "displayName": ["ink", "MessageResult"], "type": 8 },
-        "selector": "0xd868db7a"
+        "selector": "0xd868db7a",
+        "returnType": { "type": 9, "displayName": ["ink", "MessageResult"] }
+      }
+    ],
+    "lang_error": { "type": 8, "displayName": ["ink", "LangError"] },
+    "environment": {
+      "hash": { "type": 7, "displayName": [] },
+      "balance": { "type": 7, "displayName": [] },
+      "accountId": { "type": 7, "displayName": [] },
+      "timestamp": { "type": 7, "displayName": [] },
+      "blockNumber": { "type": 7, "displayName": [] },
+      "chainExtension": { "type": 7, "displayName": [] },
+      "maxEventTopics": 0
+    },
+    "constructors": [
+      {
+        "args": [
+          { "type": { "type": 2, "displayName": ["String"] }, "label": "contract_id" },
+          { "type": { "type": 2, "displayName": ["String"] }, "label": "rpc_api" },
+          { "type": { "type": 2, "displayName": ["String"] }, "label": "ipfs_endpoint" },
+          { "type": { "type": 5, "displayName": ["bool"] }, "label": "owner_restriction" }
+        ],
+        "docs": [],
+        "label": "new",
+        "default": false,
+        "payable": false,
+        "selector": "0x9bae9d5e",
+        "returnType": { "type": 6, "displayName": ["ink_primitives", "ConstructorResult"] }
       }
     ]
-  },
-  "storage": {
-    "root": {
-      "layout": {
-        "struct": {
-          "fields": [
-            { "layout": { "leaf": { "key": "0x00000000", "ty": 0 } }, "name": "private_key" },
-            { "layout": { "leaf": { "key": "0x00000000", "ty": 0 } }, "name": "salt" },
-            {
-              "layout": {
-                "root": {
-                  "layout": { "leaf": { "key": "0x1d973feb", "ty": 2 } },
-                  "root_key": "0x1d973feb"
-                }
-              },
-              "name": "cid_map"
-            },
-            { "layout": { "leaf": { "key": "0x00000000", "ty": 3 } }, "name": "owner" }
-          ],
-          "name": "ApillonContract"
-        }
-      },
-      "root_key": "0x00000000"
-    }
   },
   "types": [
     { "id": 0, "type": { "def": { "sequence": { "type": 1 } } } },
@@ -169,48 +155,31 @@
       }
     },
     { "id": 4, "type": { "def": { "array": { "len": 32, "type": 1 } } } },
+    { "id": 5, "type": { "def": { "primitive": "bool" } } },
     {
-      "id": 5,
+      "id": 6,
       "type": {
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 6 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 7 }], "index": 1, "name": "Err" }
+              { "name": "Ok", "index": 0, "fields": [{ "type": 7 }] },
+              { "name": "Err", "index": 1, "fields": [{ "type": 8 }] }
             ]
           }
         },
+        "path": ["Result"],
         "params": [
-          { "name": "T", "type": 6 },
-          { "name": "E", "type": 7 }
-        ],
-        "path": ["Result"]
+          { "name": "T", "type": 7 },
+          { "name": "E", "type": 8 }
+        ]
       }
     },
-    { "id": 6, "type": { "def": { "tuple": [] } } },
-    {
-      "id": 7,
-      "type": {
-        "def": { "variant": { "variants": [{ "index": 1, "name": "CouldNotReadInput" }] } },
-        "path": ["ink_primitives", "LangError"]
-      }
-    },
+    { "id": 7, "type": { "def": { "tuple": [] } } },
     {
       "id": 8,
       "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              { "fields": [{ "type": 9 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 7 }], "index": 1, "name": "Err" }
-            ]
-          }
-        },
-        "params": [
-          { "name": "T", "type": 9 },
-          { "name": "E", "type": 7 }
-        ],
-        "path": ["Result"]
+        "def": { "variant": { "variants": [{ "name": "CouldNotReadInput", "index": 1 }] } },
+        "path": ["ink_primitives", "LangError"]
       }
     },
     {
@@ -219,16 +188,16 @@
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 2 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 10 }], "index": 1, "name": "Err" }
+              { "name": "Ok", "index": 0, "fields": [{ "type": 10 }] },
+              { "name": "Err", "index": 1, "fields": [{ "type": 8 }] }
             ]
           }
         },
+        "path": ["Result"],
         "params": [
-          { "name": "T", "type": 2 },
-          { "name": "E", "type": 10 }
-        ],
-        "path": ["Result"]
+          { "name": "T", "type": 10 },
+          { "name": "E", "type": 8 }
+        ]
       }
     },
     {
@@ -237,21 +206,16 @@
         "def": {
           "variant": {
             "variants": [
-              { "index": 0, "name": "EcdhInvalidSecretKey" },
-              { "index": 1, "name": "EcdhInvalidPublicKey" },
-              { "index": 2, "name": "AESCannotEncrypt" },
-              { "index": 3, "name": "AESCannotDecrypt" },
-              { "index": 4, "name": "InvalidAddress" },
-              { "index": 5, "name": "BalanceOverflow" },
-              { "index": 6, "name": "FetchDataFailed" },
-              { "index": 7, "name": "FailedToGetBlockNumber" },
-              { "index": 8, "name": "RequestFailed" },
-              { "index": 9, "name": "Test" },
-              { "index": 10, "name": "NoPermission" }
+              { "name": "Ok", "index": 0, "fields": [{ "type": 2 }] },
+              { "name": "Err", "index": 1, "fields": [{ "type": 11 }] }
             ]
           }
         },
-        "path": ["rust_vault_snippets", "error", "ApillonError"]
+        "path": ["Result"],
+        "params": [
+          { "name": "T", "type": 2 },
+          { "name": "E", "type": 11 }
+        ]
       }
     },
     {
@@ -260,16 +224,25 @@
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 12 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 7 }], "index": 1, "name": "Err" }
+              { "name": "EcdhInvalidSecretKey", "index": 0 },
+              { "name": "EcdhInvalidPublicKey", "index": 1 },
+              { "name": "AESCannotEncrypt", "index": 2 },
+              { "name": "AESCannotDecrypt", "index": 3 },
+              { "name": "InvalidAddress", "index": 4 },
+              { "name": "BalanceOverflow", "index": 5 },
+              { "name": "FetchDataFailed", "index": 6 },
+              { "name": "FailedToGetBlockNumber", "index": 7 },
+              { "name": "RequestFailed", "index": 8 },
+              { "name": "Test", "index": 9 },
+              { "name": "NoPermission", "index": 10 },
+              { "name": "CidMissingForNftId", "index": 11 },
+              { "name": "BadTimestamp", "index": 12 },
+              { "name": "NotNftOwner", "index": 13 },
+              { "name": "IpfsRequestFailed", "index": 14 }
             ]
           }
         },
-        "params": [
-          { "name": "T", "type": 12 },
-          { "name": "E", "type": 7 }
-        ],
-        "path": ["Result"]
+        "path": ["schrodinger", "error", "ApillonError"]
       }
     },
     {
@@ -278,20 +251,81 @@
         "def": {
           "variant": {
             "variants": [
-              { "fields": [{ "type": 13 }], "index": 0, "name": "Ok" },
-              { "fields": [{ "type": 10 }], "index": 1, "name": "Err" }
+              { "name": "Ok", "index": 0, "fields": [{ "type": 13 }] },
+              { "name": "Err", "index": 1, "fields": [{ "type": 8 }] }
             ]
           }
         },
+        "path": ["Result"],
         "params": [
           { "name": "T", "type": 13 },
-          { "name": "E", "type": 10 }
-        ],
-        "path": ["Result"]
+          { "name": "E", "type": 8 }
+        ]
       }
     },
-    { "id": 13, "type": { "def": { "primitive": "bool" } } }
+    {
+      "id": 13,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              { "name": "Ok", "index": 0, "fields": [{ "type": 3 }] },
+              { "name": "Err", "index": 1, "fields": [{ "type": 11 }] }
+            ]
+          }
+        },
+        "path": ["Result"],
+        "params": [
+          { "name": "T", "type": 3 },
+          { "name": "E", "type": 11 }
+        ]
+      }
+    },
+    { "id": 14, "type": { "def": { "primitive": "u64" } } }
   ],
+  "source": {
+    "hash": "0x5aeaa55ce43c3f5231b12a4039b05123e4c49a1b5c32ab30cb55bba5539257f4",
+    "compiler": "rustc 1.74.0",
+    "language": "ink! 4.1.0",
+    "build_info": {
+      "build_mode": "Debug",
+      "rust_toolchain": "stable-x86_64-unknown-linux-gnu",
+      "wasm_opt_settings": { "keep_debug_symbols": false, "optimization_passes": "Z" },
+      "cargo_contract_version": "3.2.0"
+    }
+  },
+  "storage": {
+    "root": {
+      "layout": {
+        "struct": {
+          "name": "ApillonContract",
+          "fields": [
+            { "name": "private_key", "layout": { "leaf": { "ty": 0, "key": "0x00000000" } } },
+            { "name": "salt", "layout": { "leaf": { "ty": 0, "key": "0x00000000" } } },
+            {
+              "name": "cid_map",
+              "layout": {
+                "root": {
+                  "layout": { "leaf": { "ty": 2, "key": "0x1d973feb" } },
+                  "root_key": "0x1d973feb"
+                }
+              }
+            },
+            { "name": "owner", "layout": { "leaf": { "ty": 3, "key": "0x00000000" } } },
+            { "name": "owner_restriction", "layout": { "leaf": { "ty": 5, "key": "0x00000000" } } },
+            { "name": "contract_id", "layout": { "leaf": { "ty": 2, "key": "0x00000000" } } },
+            { "name": "rpc_api", "layout": { "leaf": { "ty": 2, "key": "0x00000000" } } },
+            { "name": "ipfs_endpoint", "layout": { "leaf": { "ty": 2, "key": "0x00000000" } } }
+          ]
+        }
+      },
+      "root_key": "0x00000000"
+    }
+  },
   "version": "4",
-  "phat": { "contractId": "0xe91d15151ff0032f8b2fc008a11f1dbe3244ef9e9cf492f9797904bd65fa95db" }
+  "contract": {
+    "name": "schrodinger",
+    "authors": ["Apillon <info@apillon.io>"],
+    "version": "0.1.0"
+  }
 }

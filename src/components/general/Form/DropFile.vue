@@ -3,7 +3,6 @@
     <div
       :class="[
         $style.dropzoneContainer,
-        { '!bg-bg-light': isDragging || file },
         {
           'pointer-events-none':
             state === EncryptionState.IDLE || state === EncryptionState.VERIFYING_OWNER,
@@ -16,9 +15,6 @@
           'pointer-events-none border border-dashed border-pink': state === EncryptionState.ERROR,
         },
       ]"
-      @dragover="dragover"
-      @dragleave="dragleave"
-      @drop="drop"
       @click="emit('verify')"
     >
       <input
@@ -28,7 +24,6 @@
         id="fileInput"
         accept=".json"
         :class="$style.hiddenInput"
-        @change="onChange"
       />
 
       <label for="fileInput" class="pb-10 pointer-events-none" :class="$style.fileLabel">
@@ -67,55 +62,20 @@
           Your curiosity didn't unlock the files. <br />
           (But it didn't kill the cat, either.)
         </p>
-        <p v-else-if="isDragging" class="mb-0">Release to drop files here.</p>
-        <p v-else class="mb-0">Drag & drop to update encrypted file</p>
+        <p v-else class="mb-0">Click to decrypt file</p>
       </label>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { EncryptionState } from '@/config/types';
+import { EncryptionState } from '~/lib/types/general.types';
 
 const props = defineProps({
   state: { type: Number, default: EncryptionState.IDLE },
 });
 
-const emit = defineEmits(['uploaded', 'download', 'verify']);
-const isDragging = ref<boolean>(false);
-const file = ref<File | null>();
-const fileRef = ref<HTMLInputElement>();
-const $style = useCssModule();
-
-function triggerFileUpload() {
-  if (fileRef.value) {
-    fileRef.value.click();
-  }
-}
-
-function onChange() {
-  const files = fileRef.value?.files;
-
-  if (files && files.length > 0 && files[0]) {
-    file.value = files[0];
-    emit('uploaded', files[0]);
-  }
-}
-function dragover(e: DragEvent) {
-  e.preventDefault();
-  isDragging.value = true;
-}
-function dragleave() {
-  isDragging.value = false;
-}
-function drop(e: DragEvent) {
-  e.preventDefault();
-  if (fileRef.value) {
-    fileRef.value.files = e.dataTransfer?.files || null;
-    onChange();
-  }
-  isDragging.value = false;
-}
+const emit = defineEmits(['verify']);
 </script>
 
 <style lang="postcss" module>

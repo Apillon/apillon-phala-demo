@@ -1,5 +1,7 @@
 <template>
   <router-view />
+
+  <Footer />
 </template>
 
 <script lang="ts" setup>

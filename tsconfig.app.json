@@ -1,12 +1,13 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "data/rust_vault_snippets.json"],
-  "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    "module": "es2015",
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "exclude": ["src/test.ts", "**/*.spec.ts"]
 }

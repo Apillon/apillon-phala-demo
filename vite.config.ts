@@ -2,7 +2,6 @@ import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import Pages from 'vite-plugin-pages';
-import legacy from '@vitejs/plugin-legacy';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ViteWebfontDownload } from 'vite-plugin-webfont-dl';
@@ -25,16 +24,12 @@ export default defineConfig(({ command, mode }) => {
           '@vueuse/core',
           { 'vue3-toastify': ['toast'] },
         ],
-        dirs: ['./src/config', './src/lib', './src/utils'],
+        dirs: ['./src/lib/**', './src/composables'],
         dts: 'src/auto-imports.d.ts',
       }),
 
       Components({
         dts: 'src/components.d.ts',
-      }),
-
-      legacy({
-        targets: ['defaults', 'not IE 11'],
       }),
 
       ViteWebfontDownload([
@@ -44,7 +39,6 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         '~': `${path.resolve(__dirname, 'src')}/`,
-        '@': `${path.resolve(__dirname, 'src')}/`,
       },
     },
   };
