@@ -50,6 +50,7 @@ export async function decryptContent(nftId: number, timestamp: number, signature
     );
   } catch (error) {
     console.log(error);
+
     return null;
   }
 
@@ -76,6 +77,17 @@ export function saveFile(content: string) {
 }
 
 function detectType(type: any) {
+  let fileType = '';
+
+  try {
+    fileType = type.split(';')[0].split('/')[1].split('+')[0];
+    if (fileType) {
+      return fileType;
+    }
+  } catch (error) {
+    fileType = 'txt';
+  }
+
   const extensions = {
     xls: 'application/vnd.ms-excel',
     ppt: 'application/vnd.ms-powerpoint',
@@ -89,7 +101,6 @@ function detectType(type: any) {
     csv: 'text/csv',
     txt: 'text/plain',
   };
-  let fileType = 'txt';
   Object.entries(extensions).forEach(([ext, name]) => {
     if (type.includes(name)) {
       fileType = ext;

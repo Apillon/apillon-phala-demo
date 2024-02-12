@@ -3,8 +3,13 @@
     <div ref="headerRef">
       <Header />
     </div>
-    <div class="absolute top-40 left-1/2 w-full max-w-7xl -translate-x-1/2">
-      <div v-if="nfts && nfts.length" class="absolute left-8 top-0 w-40">
+    <div
+      class="relative max-w-[90vw] mx-auto lg:absolute lg:top-40 lg:left-1/2 lg:w-full lg:max-w-7xl lg:-translate-x-1/2"
+    >
+      <div
+        v-if="nfts && nfts.length"
+        class="relative lg:absolute lg:left-8 lg:top-0 lg:w-40 lg:z-10 lg:pb-24"
+      >
         <h4>Select NFT:</h4>
         <Nfts v-model="selectedNft" :nfts="nfts" />
       </div>
@@ -81,6 +86,7 @@ async function onWalletConnected() {
 
 async function onWalletDisconnected() {
   encryptionState.value = EncryptionState.IDLE;
+  nfts.value = [];
 }
 
 async function decrypt() {
@@ -94,10 +100,13 @@ async function decrypt() {
     if (decryptedContent.value) {
       encryptionState.value = EncryptionState.DECRYPTED;
     } else {
+      toast('This NFT does`t have assigned CID.', { type: 'error' });
       encryptionState.value = EncryptionState.ERROR;
     }
   } catch (e) {
     console.log(e);
+    toast('This NFT does`t have assigned CID.', { type: 'error' });
+    encryptionState.value = EncryptionState.ERROR;
   }
 }
 

@@ -1,18 +1,20 @@
 <template>
-  <div v-for="(nft, key) in nfts" :key="key" class="relative">
-    <input
-      v-model="tokenId"
-      type="radio"
-      name="nft"
-      class="absolute"
-      :id="`nft_${nft.id}`"
-      :value="nft.id"
-      :checked="modelValue === nft.id"
-      @change="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-    />
-    <label :for="`nft_${nft.id}`">
-      <NftCard :nft="nft" :open="false" />
-    </label>
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 lg:block">
+    <div v-for="(nft, key) in nfts" :key="key" class="relative">
+      <input
+        v-model="tokenId"
+        type="radio"
+        name="nft"
+        class="absolute"
+        :id="`nft_${nft.id}`"
+        :value="nft.id"
+        :checked="modelValue === nft.id"
+        @change="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      />
+      <label :for="`nft_${nft.id}`">
+        <NftCard :nft="nft" :open="false" />
+      </label>
+    </div>
   </div>
 </template>
 

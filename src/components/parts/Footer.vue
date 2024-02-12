@@ -1,5 +1,5 @@
 <template>
-  <div class="footer absolute left-0 right-0 bottom-0 py-4 lg:py-8 flex justify-center bg-bg">
+  <div class="footer fixed left-0 right-0 bottom-0 py-4 lg:py-8 flex justify-center bg-bg">
     <div class="flex gap-2 items-center">
       Powered by
       <img src="/images/phala.png" class="object-contain" alt="phala" width="82" height="16" />
