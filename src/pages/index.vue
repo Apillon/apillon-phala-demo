@@ -90,6 +90,10 @@ async function onWalletDisconnected() {
 }
 
 async function decrypt() {
+  if (selectedNft.value === 0) {
+    toast('You need NFT to decrypt file!', { type: 'warning' });
+    return;
+  }
   encryptionState.value = EncryptionState.VERIFYING_OWNER;
 
   const [timestamp, signature] = await prepareSignData();
@@ -114,14 +118,13 @@ async function loadNfts() {
   loadingNfts.value = true;
   nfts.value = [];
 
-  const balance = contract.value ? await getBalance() : null;
-
-  if (!contract.value || !balance || balance.toString() === '0') {
-    loadingNfts.value = false;
-    return;
-  }
-
   try {
+    const balance = contract.value ? await getBalance() : null;
+
+    if (!contract.value || !balance || balance.toString() === '0') {
+      loadingNfts.value = false;
+      return;
+    }
     for (let i = 0; i < balance; i++) {
       const id = await getTokenOfOwner(i);
       const url = await getTokenUri(id);
@@ -139,9 +142,12 @@ async function loadNfts() {
     }
   } catch (e) {
     console.log(e);
+    toast('Loading NFTs failed! Please check NFT_ADDRESS and CHAIN_ID in config!', {
+      type: 'warning',
+    });
+  } finally {
+    loadingNfts.value = false;
   }
-
-  loadingNfts.value = false;
 }
 
 async function downloadFile() {

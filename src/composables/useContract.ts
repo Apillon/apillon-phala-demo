@@ -45,12 +45,18 @@ export default function useContract() {
     if (!NFT_ADDRESS) {
       toast('Please provide VITE_NFT_ADDRESS in config!', { type: 'warning' });
     } else {
-      contract.value = getContract({
-        address: NFT_ADDRESS,
-        abi: contractAbi,
-        walletClient: walletClient.value || undefined,
-        publicClient: publicClient.value,
-      });
+      try {
+        contract.value = getContract({
+          address: NFT_ADDRESS,
+          abi: contractAbi,
+          walletClient: walletClient.value || undefined,
+          publicClient: publicClient.value,
+        });
+      } catch (error) {
+        toast('Loading NFTs failed! Please check NFT_ADDRESS and CHAIN_ID in config!', {
+          type: 'warning',
+        });
+      }
     }
   }
 
