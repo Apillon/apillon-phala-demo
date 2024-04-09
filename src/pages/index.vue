@@ -72,8 +72,15 @@ const contentMaxStyle = computed(() => {
   };
 });
 
+watch(
+  () => selectedNft.value,
+  _ => {
+    encryptionState.value = EncryptionState.WALLET_CONNECTED;
+  }
+);
+
 async function onWalletConnected() {
-  sleep(200);
+  await sleep(200);
 
   loadingNFT.value = true;
   encryptionState.value = EncryptionState.WALLET_CONNECTED;

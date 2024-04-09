@@ -77,16 +77,7 @@ export function saveFile(content: string) {
 }
 
 function detectType(type: any) {
-  let fileType = '';
-
-  try {
-    fileType = type.split(';')[0].split('/')[1].split('+')[0];
-    if (fileType) {
-      return fileType;
-    }
-  } catch (error) {
-    fileType = 'txt';
-  }
+  let fileType = null;
 
   const extensions = {
     xls: 'application/vnd.ms-excel',
@@ -104,8 +95,16 @@ function detectType(type: any) {
   Object.entries(extensions).forEach(([ext, name]) => {
     if (type.includes(name)) {
       fileType = ext;
-      return;
     }
   });
-  return fileType;
+
+  // try {
+  //   fileType = type.split(';')[0].split('/')[1].split('+')[0];
+  //   if (fileType) {
+  //     return fileType;
+  //   }
+  // } catch (error) {
+  //   console.debug(error);
+  // }
+  return fileType || 'txt';
 }
