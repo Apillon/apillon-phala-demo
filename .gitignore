@@ -50,3 +50,6 @@ Thumbs.db
 
 # Contract code
 contract/target/
+
+# Env file
+.env
