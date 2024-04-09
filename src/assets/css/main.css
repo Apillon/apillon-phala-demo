@@ -1,0 +1,105 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './typography';
+@import './tooltip';
+@import './transitions';
+
+html,
+body {
+  overflow-x: hidden;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-white bg-bg;
+    font-size: 16px;
+  }
+}
+
+#app .nuxt-icon svg {
+  margin-bottom: 0;
+}
+
+/* Change autfill styles:  */
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+textarea:autofill,
+textarea:autofill:hover,
+textarea:autofill:focus,
+select:autofill,
+select:autofill:hover,
+select:autofill:focus {
+  border: none;
+  -webkit-text-fill-color: theme('colors.primary');
+  -webkit-box-shadow: 0 0 0px 1000px theme('colors.bg.light') inset;
+}
+
+/* Scrollbar */
+@screen lg {
+  html {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: theme('colors.bg.DEFAULT');
+  }
+}
+
+/* Text selection */
+::selection {
+  color: theme('colors.body');
+  background: theme('colors.bg.DEFAULT');
+}
+
+::-moz-selection {
+  color: theme('colors.body');
+  background: theme('colors.bg.DEFAULT');
+}
+
+/**
+ * Scrollbar 
+ */
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: theme('colors.bg.dark');
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: theme('colors.bodyDark');
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.body');
+}
+
+/** Border */
+.card-border {
+  @apply border-1 border-bg-lighter;
+}
+
+/** Card */
+.card {
+  @apply bg-bg card-border;
+}
+.card-dark {
+  @apply bg-bg-dark card-border;
+}
+.card-light {
+  @apply bg-bg-light card-border;
+}

@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+  pre_build:
+    commands:
+      - echo Building for $ENV
+      - printenv
+      - echo `date +%s` > timestamp
+      - echo Build started on `date`
+      - npm cache verify
+      - npm install
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - echo Deploying to bucket $S3_BUCKET
+      - aws s3 sync ./dist $S3_BUCKET --delete
+      - echo Distributing to $CLOUDFRONT_ID
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
